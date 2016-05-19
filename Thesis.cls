@@ -189,7 +189,7 @@
 %-------------------------------------------------   
 \degree{MSc.} % Your degree name - this is currently used in the title page and abstract
 %-------------------------------------------------   
-\authors{John \textsc{Smith}} % Your name - this is used in the title page and abstract
+\authors{Veaceslav \textsc{Munteanu}} % Your name - this is used in the title page and abstract
 %-------------------------------------------------   
 \addresses{} % Your address - this is not currently used anywhere in the template, cite it with \addressnames if you want it
 %-------------------------------------------------   
@@ -197,12 +197,12 @@
 %-------------------------------------------------   
 \keywords{} % Keywords for your thesis - this is not currently used anywhere in the template, cite it with \keywordnames if you want it
 %-------------------------------------------------   
-\university{\texorpdfstring{\href{http://www.hw.ac.uk} % Your university's URL
-                {Heriot-Watt University}} % Your university's name - this is currently used in the title page
-                {Heriot-Watt University}}
+\university{\texorpdfstring{\href{http://vu.nl} % Your university's URL
+                {Vrije Universiteit Amsterdam}} % Your university's name - this is currently used in the title page
+                {Vrije Universiteit Amsterdam}}
 %-------------------------------------------------   
-\UNIVERSITY{\texorpdfstring{\href{http://www.hw.ac.uk)} % Your university's URL
-                {HERIOT_WATT UNIVERSITY}} % Your university's name in capitals - this is currently used in the abstract page
+\UNIVERSITY{\texorpdfstring{\href{http://vu.nl)} % Your university's URL
+                {VRIJE UNIVERSITEIT AMSTERDAM}} % Your university's name in capitals - this is currently used in the abstract page
                 {UNIVERSITY NAME (IN BLOCK CAPITALS)}}
 %-------------------------------------------------                
 \department{\texorpdfstring{\href{http://www.macs.hw.ac.uk} % Your department's URL
