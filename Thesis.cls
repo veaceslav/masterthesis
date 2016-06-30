@@ -181,7 +181,7 @@
 %	defined as \examname above so you cite it as \examname
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Thesis Title} % Your thesis title - this is used in the title and abstract
+\thesistitle{SWAN expression in  multi-device multi-sensor environment} % Your thesis title - this is used in the title and abstract
 %-------------------------------------------------  
 \supervisor{Prof. Dr. Ir. Henri E. \textsc{Bal}} % You supervisor's name - this is used in the title page
 %-------------------------------------------------   
@@ -205,11 +205,11 @@
                 {VRIJE UNIVERSITEIT AMSTERDAM}} % Your university's name in capitals - this is currently used in the abstract page
                 {UNIVERSITY NAME (IN BLOCK CAPITALS)}}
 %-------------------------------------------------                
-\department{\texorpdfstring{\href{http://www.macs.hw.ac.uk} % Your department's URL
-                {School of Mathematical and Computer Sciences}} % Your department's name - used in the title page and abstract
-                {School of Mathematical and Computer Sciences}}
+\department{\texorpdfstring{\href{http://few.vu.nl/en/index.aspx} % Your department's URL
+                {Faculty of Sciences}} % Your department's name - used in the title page and abstract
+                { Vrije Universiteit Amsterdam}}
 %-------------------------------------------------                
-\DEPARTMENT{\texorpdfstring{\href{http://www.macs.hw.ac.uk} % Your department's URL
+\DEPARTMENT{\texorpdfstring{\href{http://few.vu.nl/en/index.aspx} % Your department's URL
                 {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}} % Your department's name in capitals - this is not currently used anywhere in the template, cite it with \DEPTNAME if you want it
                 {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}}
 %-------------------------------------------------                
