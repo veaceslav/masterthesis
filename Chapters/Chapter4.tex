@@ -11,13 +11,83 @@
 %----------------------------------------------------------------------------------------
 
 \section{Introduction}
+Initially SWAN was designed to take a single value from the sensor data.
+The value should be a primitive type such as Integer, Float, Double etc.
+This constraint applies because SWAN evaluation engine allows the programmer to perform MIN, MAX and AVERAGE operations on given sensor data.
+Also, History reduction is important when using the single value.
 
-
+By adding multiple sensors, it became clear that taking a single value is not scalable enough. 
+The further changes were delayed by adding multiple value paths to the sensor implementation. 
+A clear example was accelerometer data: You will probably need the values for all 3 axis: x, y, z.
+And you need to register 3 expressions for each value path.
+The limitation can no longer be avoided after implementing Beacon Sensors, because now we need to add a full array of beacon identifiers under the same timestamp,
+the key-value to provide individual temperature data or even key-array of values if we want the accelerometer data from all beacons.
 
 %-----------------------------------
 %	SUBSECTION 1
 %-----------------------------------
 \section{Proposed Solutions}
+All the proposed solutions should met the following requirements:
+\begin{itemize}
+ \item Support multiple sensors of the same type(beacon sensor)
+ \item Support multiple values for each sensor
+ \item Provide scheme for single sensor single value data
+ \item Provide implementation for Evaluation Engine Application
+\end{itemize}
+
+\subsection{Using a Mapping between keys and values to get all the data}
+The format of data for the following function calls(value parameter):
+\begin{lstlisting}[language=Java]
+ AbstractSwanSensor.putValueTrimSize(final String valuePath,
+					final String id,
+					final long now,
+					final Object value):
+\end{lstlisting}
+
+In order to satisfy the new requirements we propose the new data format to be encoded as: \begin{verbatim} Map<ValuePath, Map<sensorID,  ArrayList<Object>> \end{verbatim}
+
+where:
+\begin{itemize}
+ \item ValuePath  = sensor valuepaths, ex Acceleromter x, y, z, total
+ \item sensorID  =  self or unique Sensor Identifier(BeaconID)
+\end{itemize}
+
+We identify four sensor formats and recommend the following representation for each type of sensor:
+\begin{itemize}
+  \item Single Sensor Single Value(sensor name = stepcounter):
+  \begin{itemize}
+    \item \begin{verbatim} Example: Map: { steps={self=[13434545 ] }} \end{verbatim}                                                              
+  \end{itemize}
+ 
+  \item  Single Sensor, Multiple Values(sensor name =accelerometer):
+  \begin{itemize}
+    \item Key - name of the sensor
+    \item Array of values - multiple values in the same order
+    \item \begin{verbatim} Example: Map: { x={self=[0.5]},
+                 y={self=[0.6]}, z={self=[-0.5]} } \end{verbatim}  
+  \end{itemize}
+
+ 
+  \item Multiple Sensor, Single Value(Beacon Distance):
+  \begin{itemize}
+    \item Key - the sensor identifier(id)
+    \item Array of values - single value in the array
+    \item  \begin{verbatim}  Example: Map: {distance={beaconID1=[1.5],
+                 beaconID2=[0.5], beaconID3=[0.2]}} \end{verbatim}  
+  \end{itemize}
+
+  \item  Multiple Sensor, Multiple Values(sensor name = Beacon Accelerometer):
+  \begin{itemize}
+    \item Key - the sensor identifier(id), should be unique
+    \item Array of values - multiple values in the same order
+    \item  \begin{verbatim}  Example: Map:{x ={beaconID1=[-0.5], beaconID2=[-0.1],
+                y = {beaconID1=[ 0.2], beaconID2=[-0.4]}} \end{verbatim}  
+ \end{itemize}
+
+
+\end{itemize}
+
+
 
 
 %-----------------------------------
