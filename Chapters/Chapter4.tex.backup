@@ -100,7 +100,7 @@ We identify four sensor formats and recommend the following representation for e
 %	SUBSECTION 2
 %-----------------------------------
 
-\subsection{Expression Location Approach}
+\subsection{Expression Location Approach} \label{sssec:exprlocation}
 Compared to the Data Mapping, Expression Location Approach tries to preserve the single return value and value paths for each sensor.
 It works in addition to the current implementation and maintain the backwards compatibility with the previous expression format.
 The drawback of this approach is very low flexibility when the number of sensors are really high. Also this approach tries to solve an immediate 
@@ -122,34 +122,35 @@ The recommended swan expressions for the 4 categories of sensors:
  
   \item  Single Sensor, Multiple Values(sensor name =accelerometer):
   \begin{itemize}
-    \item 
-    \item 
-    \item \begin{verbatim} Example: Map: { x={self=[0.5]},
-                 y={self=[0.6]}, z={self=[-0.5]} } \end{verbatim}  
+    \item Register an expression with value path: \begin{verbatim} self@accelerometer:x{ANY, 1000}\end{verbatim}
+    \item Use putTrimValue() with a single value
   \end{itemize}
 
- 
   \item Multiple Sensor, Single Value(Beacon Distance):
   \begin{itemize}
-    \item Key - the sensor identifier(id)
-    \item Array of values - single value in the array
-    \item  \begin{verbatim}  Example: Map: {distance={beaconID1=[1.5],
-                 beaconID2=[0.5], beaconID3=[0.2]}} \end{verbatim}  
+    \item Use Beacon Discovery Sensor to get a list beaconIDs: \begin{verbatim} self@beacon_discovery:ibeaconuuid{ANY, 10}\end{verbatim} 
   \end{itemize}
 
   \item  Multiple Sensor, Multiple Values(sensor name = Beacon Accelerometer):
   \begin{itemize}
-    \item Key - the sensor identifier(id), should be unique
-    \item Array of values - multiple values in the same order
-    \item  \begin{verbatim}  Example: Map:{x ={beaconID1=[-0.5], beaconID2=[-0.1],
-                y = {beaconID1=[ 0.2], beaconID2=[-0.4]}} \end{verbatim}  
+    \item Use Beacon Discovery Sensor to get a list beaconIDs: \begin{verbatim} self@beacon_discovery:ibeaconuuid{ANY, 10}\end{verbatim}
+    \item Register individual expressions with individual valuepaths for each BeaconID: 
+    \begin{itemize}
+     \item \begin{verbatim} beaconID@beacon_movement:x{ANY,1000} \end{verbatim}
+     \item \begin{verbatim} beaconID@beacon_movement:y{ANY,1000} \end{verbatim}
+    \end{itemize}
+
  \end{itemize}
 
 
 \end{itemize}
+
+Note this expressions can not be evaluated by Evaluation Engine, because it outputs an array instead of a single value.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
 \section{Implemented Approach}
+The implemented solution was the \hyperref[sssec:exprlocation]{Expression Location Approach}
+
