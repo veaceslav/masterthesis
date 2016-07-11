@@ -29,8 +29,10 @@
 \documentclass[11pt, oneside]{Thesis} % The default font size and one-sided printing (no margin offsets)
 
 \graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
-\usepackage[square, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
+%\usepackage[square, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
 \hypersetup{urlcolor=blue, colorlinks=true} % Colors hyperlinks in blue - change to black if annoying
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+
 
 \usepackage{color}
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
@@ -271,7 +273,7 @@ $\omega$ & angular frequency & rads$^{-1}$ \\
 
 \lhead{\emph{Bibliography}} % Change the page header to say "Bibliography"
 
-\bibliographystyle{apalike} % Use the "apalike" BibTeX style for formatting the Bibliography
+\bibliographystyle{abbrv} % Use the "apalike" BibTeX style for formatting the Bibliography
 
 \bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
 

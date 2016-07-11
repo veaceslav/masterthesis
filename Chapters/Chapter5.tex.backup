@@ -78,11 +78,29 @@ The new package format can be built and uploaded directly from Android Studio. A
 the library versions should be updated accordingly:
 
 \begin{itemize}
- \item If any change or addition  in the library was made, increment the small version number : \textbf{1.0.0 -> 1.0.1}
- \item If 
+ \item If any change or addition  in the library was made, increment the patch version number : 1.0.0 $\rightarrow$1.0.1
+ \item If any public class or Enumeration was deleted, increment the minor version: 1.0.0 $\rightarrow$ 1.1.0 
+ \item The major version should be only incremented with SWAN major version: 1.0.0 $\rightarrow$ 2.0.0
 \end{itemize}
 
+More information about how to manage and upload swan libraries is available on SWAN wiki on Github[cite]
+
 \section{Beacon based Bluetooth Sensors}
+
+Bluetooth sensors allow us to get proximity data from the nearby beacons. Beacon sensor integration into SWAN expression based approach was not seamless.
+The new data specifications which include beacon extension are discussed in \hyperref[Chapter3]{Chapter 3}.
+
+The beacon implementation was divided into multiple steps:
+\begin{itemize}
+ \item Implement Bluetooth Low Energy Scan
+ \item Add support for existing Beacon Formats
+ \item Implement Bluetooth Beacon Discovery
+ \item Implement Bluetooth Based Sensors
+\end{itemize}
+
+
+
+
 
 \section{Value based SmartWatch Sensors}
 

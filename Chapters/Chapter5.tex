@@ -16,7 +16,7 @@ We will cover the following main changes operated to SWAN project structure duri
 \begin{itemize}
  \item Merging multiple SWAN repositories
  \item Splitting the SWAN project sources in libraries
- \item Uploading the SWAN JARS in publicly available repository - Jcenter
+ \item Uploading the SWAN JARS in publicly available repository - JCenter
 \end{itemize}
 
 Each of this changes had a big impact on SWAN and could bring unexpected bugs.
@@ -39,9 +39,9 @@ We followed this procedure when merging the SWAN:
  \item Merge IoT SWAN into master and resolve conflicts
 \end{itemize}
 
-The most challenging part was to apply patches from the two different repositories. Merging commits[cite them] were the reason why some history was 
-lost, and patches were hard to apply. This also proves why you should always use the rebase[cite them] option instead of merging option when you push commits
-to the remote
+The most challenging part was to apply patches from the two different repositories. Merging commits were the reason why some history was 
+lost, and patches were hard to apply. This also proves why you should always use the rebase option instead of merging option when you push commits
+to the remote. Atlassian article\cite{atlassian_merge_rebase} explains the main advantage of rebasing over using merging commits.
 
 \subsection{Splitting SWAN sources into libraries}
 After the implementation of the smartwatch sensors and beacon sensors, as part of research topic, SWAN had to be ported on smartwatch.
@@ -69,11 +69,10 @@ The same design was applied to Abstract SWAN Sensor who was relying on Sense And
 
 After \textbf{Swan Core} was made independent, we decided to extract \textbf{Swan Song} and \textbf{Swan Interface} from it and make them separate libraries.
 The main reason for this library separation was the way applications interact with SWAN. Swan Interface are often imported as a separate jar in any application that want to register a 
-SWAN expression. To improve the distribution of the Swan Interface, we decided to make it available on Android Main Repository - JCenter [cite]. Uploading the Jars required us to follow this tutorial:
-[cite] https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en
+SWAN expression. To improve the distribution of the Swan Interface, we decided to make it available on Android Main Repository - JCenter\cite{jcenter}. Uploading the Jars required us to follow the tutorial by The Cheese Factory\cite{jcenter_tutorial}.
 
 Because we are maintaining the packages on JCenter now, the old packages and package building scripts  in the repository were discarded.
-The JCenter  is not storing the packages in JAR format, but in the new format made to accommodate the Android Resources: AAR [cite]. 
+The JCenter  is not storing the packages in JAR format, but in the new format made to accommodate the Android Resources: AAR \cite{aar_format}. 
 The new package format can be built and uploaded directly from Android Studio. Also, when changes are being operated on Swan Interface, 
 the library versions should be updated accordingly:
 
@@ -83,9 +82,26 @@ the library versions should be updated accordingly:
  \item The major version should be only incremented with SWAN major version: 1.0.0 $\rightarrow$ 2.0.0
 \end{itemize}
 
-More information about how to manage and upload swan libraries is available on SWAN wiki on Github[cite]
+More information about how to manage and upload swan libraries is available on SWAN wiki on Github\cite{swanWiki}
 
 \section{Beacon based Bluetooth Sensors}
+
+Bluetooth sensors allow us to get proximity data from the nearby beacons. Beacon sensor integration into SWAN expression based approach was not seamless.
+The new data specifications which include beacon extension are discussed in \hyperref[Chapter3]{Chapter 3}.
+
+Before jumping to the implementation details we must discuss the available Beacon technology and Beacon Frame format.
+The Bluetooth Low Energy Beacons can broadcast various data with different transmission power and broadcast interval.
+The broadcast power is measured in dBi\cite{dbiRef}
+
+The beacon implementation was divided into multiple steps:
+\begin{itemize}
+ \item Implement Bluetooth Low Energy Scan
+ \item Add support for existing Beacon Formats
+ \item Implement Bluetooth Beacon Discovery
+ \item Implement Bluetooth Based Sensors
+\end{itemize}
+
+
 
 
 
