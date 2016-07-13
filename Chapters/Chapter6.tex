@@ -227,4 +227,77 @@ and without any phone or smartwatch usage between the tests.
 
  Using battery level measurement can also be affected by battery maximum capacity, charge-discharge cycle, but since we repeat the experiment for both options on the same hardware, and without delay we can argue that results can be compared.
  Additionally, measuring the battery levels allow us to have a better average value.
+ 
+ \subsection{Experiment Execution}
+ After initial research we concluded that the data from hardware fuel gauge is highly inaccurate on Android Wear.
+ The reason is exceptionally power efficient hardware and high error rate for power consumption sensor. 
+ Also we are unable to test what is the power implication of running the SWAN WEAR foreground service. 
+ In order to obtain some power metrics, we will monitor battery levels on phone and smartwatch after SWAN expression returns a given amount of sensor values, in both scenarios.
+The results that we might will be analyzed based on power consumption on both phone and smartwatch.
+The experiment steps should be performed in the following order:
+\begin{itemize}
+ \item Factory reset both phone and smartwatch.
+ \item Pair smartwatch to the phone
+ \item Install swan on the phone and smartwatch
+ \item Run a preliminary test, to see if swan is ready to operate
+ \item Charge both phone and smartwatch to 100%
+ \item Install test application
+ \item Disable Wi-Fi and radio, leave only Bluetooth
+ \item Start test application and turn off the screen of the phone
+ \item Test application should take the phone and wear battery levels and remaining Power values before starting test evaluations
+ \item Wait for application to finish the test suite
+ \item Test application will take the battery levels and remaining power values after the tests are finished and will write them on local storage for further analysis
+\end{itemize}
+
+For the testing purpose, we will avoid sensors that are dependent of user motion to actually work: 
+\begin{itemize}
+ \item Step counter sensor - will send updates only if the user walked after last query. It might also be related to hardware implementation of the sensor in our test device. 
+ \item Light sensor - the updates are triggered by changes in light level and since our test setup is configured to run for a long time, we can not include a sensor triggered by external,
+ undefined behaviour
+\end{itemize}
+
+Surprisingly, the Heart Rate Sensor will still give you values even if it is not mounted on the wrist, so we can use it for our test purpose. 
+Heart rate sensor is different compared to regular sensors found on the phone. The smallest granularity for heart rate results is one second,
+so specifying a smaller delay will not make any sense.  Delays bigger than one second instead will fulfilled by SWAN implementation.
+ 
+ \subsection{Preliminary Tests}
+Preliminary tests shows us that we can not rely on the estimated power reported by the fuel gauge sensors. In case of our phone device,
+Nexus 6P, the reported values in nano-watts were not accurate at all. Instead, the current discharge current was reported, 
+but we can not use it in our tests, since it will interfere with our test setup.
+We encountered the similar problem on our smartwatch, Motorola 360 generation 2. 
+The reported value in nano-Watts was not corresponding with the maximum theoretical energy that the watch battery is able to hold, according to the specifications.
+The current power consumption value.
+On the other hand the formulas for running the specified amount of time are accurate, we recorded a deviation of +- 5% of run time for different types of sensors 
+
+To get comparable results we are supposed to guarantee equal conditions for both test scenarios.
+Since SWAN is quite power efficient and sensors that we are targeting are also very power efficient, the test should run for a long period of time.
+We estimated that a notable difference in battery levels should occur after running SWAN expressions for around two hours period.
+Running tests for longer period of time can help us identify even smaller differences, 
+but the necessity of running the experiments with different type of expressions and also the number of repetitions for each scenario make the use of longer runtimes prohibitive.
+Also we should take into consideration the charging time necessary after each run of the experiment,
+with smartwatch normally loosing the biggest battery percentage  and having long recharge times.
+
+\subsection{Test Application}
+The test application was build in order to run tests in batch order and gather the battery level data. To avoid power consumption from external sources, such as phone screen, we implemented the testing code as foreground service[3] which is not hibernated by the android system when the screen is off. 
+The testing application has the following workflow:
+For each SWAN expression:
+\begin{itemize}
+ \item Register a swan expression and get the battery level of the phone before the experiment
+ \item Register a swan expression and get the battery level of the smartwatch before the experiment
+ \item Register the start time
+ \item Calculate the number of values necessary for the run, based on the given expected runtime in microseconds
+ \item Register the experiment expressions and wait until the number of values are reached
+ \item Register expression end time
+ \item Get the battery level of the phone after the experiment
+ \item Get the battery level of the smartwatch after the experiment
+\end{itemize}
+
+
+Once the tests for expression is done, the application will write on local storage, in a text file the expressions name,
+battery levels before and after for each device the number of values received and the total runtime.
+ The values are comma separated, so it can be imported in Excel for further processing.
+
+Even if the program runs in a separate service, we are not allowed to block in the main thread. 
+We are actually required to wait for the SWAN expression to terminate, so we sent the computation in another thread and we used Latch to wait for expression execution.
+
  \section{Results}
