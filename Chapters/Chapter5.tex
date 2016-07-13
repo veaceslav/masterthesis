@@ -89,11 +89,34 @@ More information about how to manage and upload swan libraries is available on S
 Bluetooth sensors allow us to get proximity data from the nearby beacons. Beacon sensor integration into SWAN expression based approach was not seamless.
 The new data specifications which include beacon extension are discussed in \hyperref[Chapter3]{Chapter 3}.
 
-Before jumping to the implementation details we must discuss the available Beacon technology and Beacon Frame format.
+Before exploring the implementation details we must discuss the available Beacon technology and Beacon Frame format.
 The Bluetooth Low Energy Beacons can broadcast various data with different transmission power and broadcast interval.
-The broadcast power is measured in dBi\cite{dbiRef}
+The broadcast power is measured in dBm\cite{dbiRef}. The transmission power can vary from -30dBm and +4dBm. Higher transmit power
+increase the range, but also shorten the battery life. The broadcast interval can vary from 300ms to more than 5 seconds. Higher resolution improve the accuracy of data,
+especially for real-time applications, but also shorten the battery life.
 
-The beacon implementation was divided into multiple steps:
+To avoid the fragmentation of the Beacon Market, Google and Apple stepped in and proposed two standards for Beacon Frame Layout:
+\begin{itemize}
+ \item Apple iBeacon - simple beacon format, mostly used for proximity(distance measuring) applications
+ \item Google Eddystone - complex standard, with 3 available frame formats:
+ \begin{itemize}
+  \item Eddystone UID - similar to iBeacon, broadcast unique ID
+  \item EddystoneTLM - telemetry frame format, stores information about the beacon, such as temperature, battery level, number of packets sent
+  \item Eddystone URL - frame layout which encodes a 17 bytes long URL in the frame
+ \end{itemize}
+\end{itemize}
+
+The standards from above are industry recognized and widely implemented by various Beacon Manufacturers.
+Unfortunately even the Google Eddystone Format is not flexible enough and some companies need to come up with their own format to support extra functionality 
+added to  their beacon products. We will also discuss the following frame formats which are proprietary to companies selling the test beacons, but they enable us to explore the
+new way of using beacons:
+\begin{itemize}
+ \item AltBeacon Beacon Format - default beacon format present in the library used by SWAN for beacon scanning
+ \item Estimote Nearable - Beacon Frame Format developed by Estimote\cite{estimote_company}, with accelerometer and movement data embedded into the format
+\end{itemize}
+
+The beacon implementation is revolving around adding support for the four beacon formats listed above. Implementation details were further split into
+following steps:
 \begin{itemize}
  \item Implement Bluetooth Low Energy Scan
  \item Add support for existing Beacon Formats
@@ -101,8 +124,17 @@ The beacon implementation was divided into multiple steps:
  \item Implement Bluetooth Based Sensors
 \end{itemize}
 
+\subsection{AltBeacon Library}
+The AltBeacon Library is deleveloped by Radius Networks company and provide a free and open-source implementation for applications that want to scan for beacons.
+We choose to use this library over a custom implementation because of the easy way to add new beacon format. The library does not support beacons with encrypted 
+identifiers, but it allows us to parse almost any existing, non-encrypting beacon frame. A proof of flexibility is our beacon layout for Estimote Nearable that we were able to 
+implement in SWAN.
+AltBeacon runs as a service, so SWAN needs to register to get the results of every scan. All the data from available beacons are available at once, so we decided to go for observer 
+pattern, and register all sensors that want to access beacon data in our singleton class. This allows us to scan once for all sensors.
 
-
+\subsection{Beacon Frame Formats}
+The support for Apple iBeacon, Eddystone UID, Eddystone TLM, Eddystone URL and AltBeacon Format was already available in the library.
+The Estimote format was left for us to analyze and provide the proper parsing expression to the AltBeacon Library.
 
 
 \section{Value based SmartWatch Sensors}

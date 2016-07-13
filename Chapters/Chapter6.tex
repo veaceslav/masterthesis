@@ -11,13 +11,220 @@
 %----------------------------------------------------------------------------------------
 
 \section{Introduction}
+The current implementation of the SWAN WEAR allows us to choose which way we want to process the data from the smartwatch application:
+\begin{itemize}
+ \item Perform minimum amount of computation on the watch and just send values to be processed by the SWAN PHONE application
+ \item Send the expression to SWAN WEAR application for evaluation
+\end{itemize}
 
-\section{Devices}
+Typically the recommended approach is to minimize the computation on the watch to save battery, but in certain cases,  when expression does not require frequent evaluation, we might get better power savings if we choose to perform the evaluation on the watch.
 
-\section{Experiment}
+\section{Design}
+Before proceeding to the data analysis, according to the GQM[4] paradigm, we should define the goal, the questions and the metrics.
+    Our goal is to \textbf{analyze the power consumption} of phone and smartwatch, for the purpose of \textbf{comparing two different methods of acquiring sensor data}
+    with respect to \textbf{differences in power consumption of phone and smartwatch}, in context of \textbf{SWAN android application}.
 
-\subsection{Methodology}
+\textbf{Question 1}: What is the overhead of gaining data from smartwatch, compared to running evaluation on the watch?
+\begin{itemize}
+  \item Metric 1:  Battery level on Android Phone
+  \item Metric 2:  Battery level on Android Smartwatch
+  \item Metric 2:  Battery level on Android Smartwatch
+  \item  Metric 3:  Expression runtime in seconds
+\end{itemize}
 
-\subsection{Experiment Setup}
+\textbf{Question 2}:  What is the overhead of gaining data from test sensor compared to real hardware sensor?
+\begin{itemize}
+ \item Metric 1:  Battery level on Android Phone
+ \item Metric 2: Battery level on Android Smartwatch
+\end{itemize}
 
-\section{Results}
+\section{Experiment Planning}
+\subsection{Context Selection}
+The experiment will be run on the simulated environment, composed of Android Phone and Android Wear Smartwatch. We will consider our experiment a real life problem because:
+\begin{itemize}
+ \item The tests are performed on real devices, which are used as reference for many android developers
+ \item The test suite is composed of various sensor data, which reflect the actual SWAN performance in real life applications.
+\end{itemize}
+
+\subsection{Variable Selection}
+
+The main dependent variable is \textbf{power consumption} expressed as battery power consumed after the experiment.
+The independent variables are \textbf{data acquisition method} and \textbf{delay}.
+Data acquisition method  have two options:
+\begin{itemize}
+ \item Phone based SWAN expressions
+ \item Wear Based SWAN Expressions
+\end{itemize}
+
+Delay is set by us, but to avoid spending too much time on experiment, we will choose between two options: fast(100ms) and slow(1 second).
+
+\subsection{ Hypothesis Formulation}
+
+    We consider $\mu$ the battery power consumed by the test suite
+    
+    \textbf{Question 1:} What is the overhead of gathering data from smartwatch, compared to running evaluation on the watch? \newline
+Conjecture(P): There is a difference between gaining data and evaluating expression on the smartwatch is significant \newline
+Consequence(Q): The difference between only gaining data and evaluating expression on the smartwatch. \newline
+\textit{Null hypothesis} - No observable difference in power consumption between only gathering data and evaluating expression on the watch \newline
+H0 : ( $\mu$\textsubscript{phone} - $\mu$\textsubscript{wear} = 0) \newline
+  Alternative hypothesis - There is a difference in power consumption between only gaining data on watch and running a SWAN expression on the watch \newline
+H1:($\mu$\textsubscript{phone} - $\mu$\textsubscript{wear} $\neq$ 0)  \newline
+
+    \textbf{Question 2:}  What is the overhead of gaining data from test sensor compared to real hardware sensor?\newline
+    Conjecture(P): There is  a difference between using test sensor and real sensor on the smartwatch is significant\newline
+    Consequence(Q): The difference between only gaining data and evaluating expression on the smartwatch is significant.\newline
+    \textit{Null hypothesis} - No observable difference in power consumption between using test sensor and hardware sensor on the watch\newline
+H0 : ($\mu$\textsubscript{test} - $\mu$\textsubscript{real} = 0)\newline
+    Alternative hypothesis - There is a difference in power consumption between using test sensor and hardware sensor on the watch\newline
+H1:($\mu$\textsubscript{test} - $\mu$\textsubscript{real} $\neq$ 0)\newline
+
+\subsection{Subject Selection}
+For this experiment we will use a batch of expressions targeting multiple sensors available on the smartwatch.
+The batch for phone based tests contains the following expressions:
+\begin{itemize}
+ \item \begin{verbatim}self@wear_movement:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}self@wear_gamerotation:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}self@wear_linearacceleration:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}self@wear_gravity:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}self@wear_heartrate:heart_rate?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+\end{itemize}
+
+The batch for wear based expressions contains the following expressions:
+\begin{itemize}
+ \item \begin{verbatim}wear@movement:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}wear@gamerotation:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}wear@linearacceleration:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}wear@gravity:x?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+ \item \begin{verbatim}wear@heartrate:heart_rate?delay={$delay}$server_storage=FALSE{ANY,0}\end{verbatim}
+\end{itemize}
+
+The \textbf{\{\$delay\}} will be replaced by appropriate value when registering an expression
+
+To evaluate the performance of the real sensor compared to test sensor, we will run the test sensor for the same 
+amount of values and we will compare its power consumption with power consumption from hardware sensors. 
+There will be 2 implementations of the test sensor, one for each data acquisition approach.
+
+\subsection{Experiment Design}
+For the first part of the experiment we will have two factors to vary: \textbf{data acquisition approach} and \textbf{delay}.
+This will give us four different scenarios to test:
+
+\begin{center}
+  \begin{tabular}{ |l|l|l|l| }
+  \hline
+  \multicolumn{4}{ |c| }{Factor A: Data acquisition Method} \\
+  \hline
+  \multicolumn{2}{|c|}{Phone Based Evaluation}  & \multicolumn{2} {|c|}{Wear Based Evaluation} \\
+  \hline
+  \multicolumn{2}{|c|}{Factor B: Delay}  & \multicolumn{2} {|c|}{Factor B: Delay} \\
+  \hline
+  Delay: 100ms & Delay: 1000 ms & Delay: 100ms & Delay: 1000 ms\\
+  \hline
+  3x Experiments & 3x Experiments & 3x Experiments &3x Experiments\\
+  \hline
+  \end{tabular}
+\end{center}
+
+The second part of the experiment will focus on quantifying the discrepancy between power consumption when using a test sensor
+versus using a real, hardware sensor.In this test scenario we also apply delay of 100 ms and 1000ms, to be fully aware of the implications of all factors.
+
+\begin{center}
+ \textbf{Delay 100 ms:}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ |l|l|l|l| }
+  \hline
+  \multicolumn{4}{ |c| }{Factor A: Data acquisition Method} \\
+  \hline
+  \multicolumn{2}{|c|}{Phone Based Evaluation}  & \multicolumn{2} {|c|}{Wear Based Evaluation} \\
+  \hline
+  \multicolumn{2}{|c|}{Factor B: Sensor Type}  & \multicolumn{2} {|c|}{Factor B: Sensor Type} \\
+  \hline
+  Real Sensor & Test Sensor & Real Sensor & Test Sensor\\
+  \hline
+  3x Experiments & 3x Experiments & 3x Experiments &3x Experiments\\
+  \hline
+  \end{tabular}
+\end{center}
+
+\begin{center}
+ \textbf{Delay 1000 ms:}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ |l|l|l|l| }
+  \hline
+  \multicolumn{4}{ |c| }{Factor A: Data acquisition Method} \\
+  \hline
+  \multicolumn{2}{|c|}{Phone Based Evaluation}  & \multicolumn{2} {|c|}{Wear Based Evaluation} \\
+  \hline
+  \multicolumn{2}{|c|}{Factor B: Sensor Type}  & \multicolumn{2} {|c|}{Factor B: Sensor Type} \\
+  \hline
+  Real Sensor & Test Sensor & Real Sensor & Test Sensor\\
+  \hline
+  3x Experiments & 3x Experiments & 3x Experiments &3x Experiments\\
+  \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Threats to Validity}
+External: The experiment is being performed on specific setup. Even if the devices in our tests are chosen to represent the reference,
+the android market is fragmented, and different android versions, hardware and smartwatches can yield to a different result
+
+Internal: Basing our power consumption  results on battery levels increase the total error rate. Non linear discharge rate,
+battery wear[5] can influence the final conclusion. To avoid these battery limitations, we will perform tests only when the battery is fully charged, 
+so the discharge pattern will be the same. Also to reduce the battery wear impact, the tests will be performed with limited time delay,
+and without any phone or smartwatch usage between the tests.
+
+ Internal: The batch execution of the expression can induce extra error if different types of sensors have different power consumption. 
+ We will try to limit the impact of this error type by proving that the selection of the sensors have the same power draw by
+ performing single sensor benchmark with initial full battery. 
+ 
+ Internal: The communication using Bluetooth may vary energy consumption based on distance or obstacles between devices.
+ We minimize the impact of Bluetooth, by placing phone and smartwatch in close proximity with no obstacles in between.
+ 
+ External: Heart rate sensor can be unpredictable. In some circumstances, the heart rate sensor can stop giving values. 
+ Since we were not wearing the watching during our test, were placed it on the charging dock, with no charging cable connected and the phone
+ in close proximity. By satisfying this conditions, the experiment setup and results can be verified.
+ 
+ \subsection{Instrumentation}
+ The following devices are available to perform our experiment:
+ \begin{itemize}
+  \item Phone - Nexus 6P - manufactured by Huaweii,  with latest Android 6.0 Marshmallow installed and with Android security patch level: 1 June 2016. 
+  \item Smartwatch - Motorola 360 gen 2, with latest Android 6.0 Marshmallow, android wear version 1.5 
+ \end{itemize}
+
+ We could have a bigger selection of phones to run SWAN on them, since we only have one smartwatch available,
+ the different processors  and Bluetooth chips might induce more random in our observations.
+ Besides we can argue that Nexus phones are used by default by a lot smartwatch manufacturers for tests.
+ Before proceeding to experiment setup, the devices were factory reset and the only android wear app necessary for smartwatch connection was installed.
+ We observed that by default a lot of Google applications are installed on the Nexus Phone. Some of them also have watch apps packaged.
+ To avoid possible battery drain from other applications we decided to disable the following apps on the Nexus Phone:
+ \begin{itemize}
+  \item  Google Drive
+  \item Google Play Games
+  \item Google Play Music
+  \item Hangouts
+  \item Google Maps
+  \item Google Photos
+  \item Youtube
+  \item Google Docs
+ \end{itemize}
+
+ Measuring power consumption of both approaches require us to have accurate tools for measuring power consumption.
+ The power consumption should be measured on both phone and android wear device, so we could better understand what are the pros and cons of using each method.
+ We have two methods of measuring the power consumption:
+ \begin{itemize}
+  \item Using the android battery starts, which provide the current power draw if the device is equipped with a hardware fuel gauge(Our test devices Nexus 6P and Moto 360 gen 2 )[1]
+  \item The standard setup: Running each method for a prolonged amount of time and measure the battery level after the experiment is done
+ \end{itemize}
+
+ Using the hardware power gauge is a very useful feature to measure the power consumption. Unfortunately it suffers from two major disadvantages:
+ \begin{itemize}
+  \item We require to run another battery sensor, so the results may not reflect the constant power consumption of the swan application running
+  \item Hardware fuel gauge has it's own limitations, and the computed power usage may not be accurate
+ \end{itemize}
+
+ Using battery level measurement can also be affected by battery maximum capacity, charge-discharge cycle, but since we repeat the experiment for both options on the same hardware, and without delay we can argue that results can be compared.
+ Additionally, measuring the battery levels allow us to have a better average value.
+ \section{Results}
