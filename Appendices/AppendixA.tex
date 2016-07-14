@@ -1,9 +1,146 @@
 % Appendix A
 
-\chapter{Appendix Title Here} % Main appendix title
+\chapter{Power Analysis Data} % Main appendix title
 
-\label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
+\label{AppendixPower} % For referencing this appendix elsewhere, use \ref{AppendixA}
 
-\lhead{Appendix A. \emph{Appendix Title Here}} % This is for the header on each page - perhaps a shortened title
+\lhead{Appendix A. \emph{Power Analysis Data}} % This is for the header on each page - perhaps a shortened title
 
-Write your Appendix content here.
+We recorded a lot of data as part of the power consumption experiment. We do not include it in the main thesis body, but we offer the reader
+the possibility of analyzing and reading raw data.
+
+All the tables from below include the average of 3 experiments performed. The average function used it the AVERAGE macro from Google Docs.
+
+\begin{center}
+
+  \begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 	12000	& 100	& 100	&  94.67	 &  86.67 	& 1521.67 \\
+gamerotation	 & 	12000	&	94.67	&	86.67	& 	87.67	&	 74	& 1517.67 \\
+linear acceleration 	& 12000	&	87.67	&	74 	&	80.67	& 62	& 	1507 \\ 
+gravity 	&	12000	&	80.67	&	62	     	&		73.67	& 	49.33	& 	1515 \\
+heartrate & 	1200	&	73.67	&	9.33		&	73.33	& 	46.33	& 	1288 \\
+  \hline
+  \end{tabular}
+  \captionof{table}{Phone Based Expression with delay 100 ms} \label{tab:title1} 
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 	1200	& 100	& 100	& 96.67	& 89.33	&1178.33 \\
+gamerotation	 & 1200	&96.67	& 89.33	& 92	& 79.33	& 1178  \\
+linear acceleration 	& 1200	& 92	& 79.33	& 86.67	& 69.33	& 1178  \\ 
+gravity 	&	1200	& 86.67	& 69.33	& 81.67	& 59.67	& 1178.33	 \\
+heartrate & 	1200	& 81.67	& 59.67	& 80.67	& 55.33	& 1987.33 \\
+  \hline
+  \end{tabular}
+    \captionof{table}{Phone Based Expression with delay 1000 ms} \label{tab:title2} 
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 12000	& 100	& 100	& 100	& 92	& 1254	 \\
+gamerotation	& 12000& 	100	& 92	& 98.33	& 85	& 1248.67  \\
+linear acceleration 	&  12000 &	98.33	& 85	& 97.33 	& 77 & 	1208.67\\ 
+gravity 	&		12000	& 97.33& 	77	& 96	& 70	& 1253.67 \\
+heartrate & 	1200	& 96	& 70 & 	95.33	& 67	& 1279 \\
+  \hline
+  \end{tabular}
+      \captionof{table}{Wear Based Expression with delay: 100 ms} \label{tab:title3} 
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ |p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 	1200	& 100	& 100	& 100	& 94.33 & 	1189 \\
+gamerotation	 &  1200	& 100	& 94.33	& 100	& 89.67	& 1176.67\\
+linear acceleration 	& 1200	& 100	& 89.67	& 100	& 84.67	& 1203.67 \\ 
+gravity 	&		1200	& 100	& 84.67	& 99	& 79.67	& 1190 \\
+heartrate & 	 1200	& 99	& 79.67	& 98	& 75.33	& 2201.33\\
+  \hline
+  \end{tabular}
+        \captionof{table}{Wear Based Expression with delay: 1000 ms} \label{tab:title4} 
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 	12000 & 	100 & 	100	& 95	& 87	& 1506 \\
+gamerotation	 & 12000 & 100	& 100	& 95	& 87	& 1515  \\
+linear acceleration 	& 12000	& 100	& 100	& 95	& 87	& 1513 \\ 
+gravity 	&		12000	& 100	& 100	& 95	& 87	& 1514 \\
+test sensor & 	12000	& 100	& 100	& 97	& 90	& 1862 \\
+  \hline
+  \end{tabular}
+          \captionof{table}{Individual Phone Based Expression  power consumption, delay 100 ms} \label{tab:title5} 
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+movement 	& 	12000	& 100	& 100	& 100	& 91	& 1281 \\
+gamerotation	 & 12000	 & 100	& 100	& 100	& 91	& 1265 \\
+linear acceleration 	&  12000 & 	100	& 100	& 100	& 91	& 1207\\ 
+gravity 	&		12000	& 100	& 100	& 100	& 91	& 1214 \\
+test sensor & 	 12000	& 100	& 100	& 100	& 92	& 1325\\
+  \hline
+  \end{tabular}
+            \captionof{table}{Individual Wear Based Expression  power consumption, delay 100 ms} \label{tab:title6} 
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Location &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+phone	&  48000 &	100	& 100	& 86	& 66.33	& 7480.33 \\
+wear	 & 48000	 &100	&100	&95.67	&73.33 &	5617 \\
+  \hline
+  \end{tabular}
+   \captionof{table}{Phone and Wear based Test Sensor, delay 100 ms} \label{tab:title7} 
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+  \hline
+Sensor Location &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+  \hline
+phone	&  4800	& 100	&100	&97	 &82	&7663.67 \\
+wear	 & 4800	&100	&100	&99	 &88.67	&4899 \\
+  \hline
+  \end{tabular}
+   \captionof{table}{Phone and Wear based Test Sensor, delay 1000 ms} \label{tab:title8} 
+\end{center}
+% \begin{center}
+%   \begin{tabular}{ |p{3cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|}
+%   \hline
+%     \multicolumn{7}{ |c| }{Running Phone Based Expression with delay: 1000 ms} \\
+%   \hline
+% Sensor Name &Number of values &	Phone battery before &	Smart watch battery before &	Phone battery after	& Smart watch battery after &	Runtime (sec) \\
+%   \hline
+% movement 	& 	 \\
+% gamerotation	 &  \\
+% linear acceleration 	&  \\ 
+% gravity 	&		 \\
+% heartrate & 	 \\
+%   \hline
+%   \end{tabular}
+% \end{center}
