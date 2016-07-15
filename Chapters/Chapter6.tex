@@ -301,3 +301,72 @@ Even if the program runs in a separate service, we are not allowed to block in t
 We are actually required to wait for the SWAN expression to terminate, so we sent the computation in another thread and we used Latch to wait for expression execution.
 
  \section{Results}
+
+We performed all experiments according to the Experiment Design and we obtained a lot of data. To improve readability,
+we decided not to include all the raw data in this chapter. If you are interested to see the raw data, check Appendix A, for tables containing the
+average values of 3 experiments.
+
+\subsection{Preliminary Analysis}
+
+We present the results of our data in graphs below.
+The Figures 6.1-6.5 contain the data relevant for our hypothesis testing.
+ 
+ \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.8]{Figures/phone_vs_wear_100.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Phone vs Wear Based Expressions, delay 100 ms]{Phone vs Wear Based Expressions, delay 100 ms}
+  \label{fig:phone_vs_wear_100}
+\end{figure}
+
+\hyperref[fig:phone_vs_wear_100]{Figure 6.1} represents the power consumption of phone based expressions and wear based expression for very fast delay,
+and fixed number of received values. As we can see the phone based SWAN expressions are highly inefficient, phone battery dropped \textbf{34\%} more and watch battery dropped 
+\textbf{20 \% } more than watch based SWAN expression. 
+
+ \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.8]{Figures/phone_vs_wear_1000.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Phone vs Wear Based  Expressions, delay 1000 ms]{Phone vs Wear Based  Expressions, delay 1000 ms}
+  \label{fig:phone_vs_wear_1000}
+\end{figure}
+
+\hyperref[fig:phone_vs_wear_1000]{Figure 6.2} represents the power consumption of phone based expressions and wear based expression for normal delay, also
+with fixed number of received values. This test scenario highlights the very good power savings for phone battery, with only \textbf{1\%} drop in phone battery for watch based SWAN
+expressions. Phone based expressions perform better than in fast delay scenario, but still very power inefficient for both watch and phone.
+
+ \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.8]{Figures/execution_times.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Run time of different number of sensors, baseline 4800 seconds]{Run time of different number of sensors, baseline 4800 seconds}
+  \label{fig:execution_times}
+\end{figure}
+
+As part of the experiment, we noticed that different types of expression have different runtimes for the same number of recorded values. The expected run time for all expression,
+given the delay, was 4800 seconds. \hyperref[fig:execution_times]{Figure 6.3} shows the execution times of wear and phone based expressions, for both real sensors and our software test sensor.
+We might argue that longer runtimes translate into more battery consumption, but we consider that it is important to honor the given delay and extra power consumption will still be counted for 
+our analysis.
+
+ \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.8]{Figures/phone_expr_consumption.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Expression Power Consumption]{Phone Based Expression Power Consumption}
+  \label{fig:phone_expr_consumption}
+\end{figure}
+
+The graphs show clearly that phone based expressions are not efficient.  We should further validate our approach by excluding the variable update rate from a real hardware sensor.
+Test sensor will always send updates with the specified delay, and as we can see in \hyperref[fig:phone_expr_consumption]{Figure 6.4}, the shorter delay from hardware sensor is responsible
+for more power used.
+
+ \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.8]{Figures/wear_expr_consumption.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Expression Power Consumption]{Phone Based Expression Power Consumption}
+  \label{fig:wear_expr_consumption}
+\end{figure}
+
+For watch based expression, the phone battery improvements are non-existent(or, at least do not surpass our error threshold the be considered a difference). On the other hand,
+a stable delay still translates into \textbf{ 5 to 10\%} less battery consumed on the watch as we can see in \hyperref[fig:wear_expr_consumption]{Figure 6.5}
