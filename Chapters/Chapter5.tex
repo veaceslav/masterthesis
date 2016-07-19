@@ -136,6 +136,20 @@ pattern, and register all sensors that want to access beacon data in our singlet
 The support for Apple iBeacon, Eddystone UID, Eddystone TLM, Eddystone URL and AltBeacon Format was already available in the library.
 The Estimote format was left for us to analyze and provide the proper parsing expression to the AltBeacon Library.
 
+The process of parsing the non- standard frame starts with finding the specifications for each byte in the frame. Fortunately, we found a NodeJs implementation 
+who parses the Estimote Nearable Frame. The data encoded is presented in \hyperref[fig:estimote_format]{Figure 5.1}.
+Before decoding the data we must tell the AltBeacon Library where to look for the frame identifier. The debugging mode allows us to see how the Bluetooth Low Energy frames are being parsed.
+
+\subsection{Retrieving data from specific Beacons}
+Original SWAN only allowed to return a single value of the primitive type. To comply with the new SWAN Data Specifications we test the location part of expression to see which information we should provide:
+
+\begin{itemize}
+ \item If location is \textbf{self} we retrieve a random beacon from the list, which matches our frame type and give the result to the user
+ \item if location contains a \textbf{beacon ID} we search for the beacon in list and if it is present, we will output the result
+\end{itemize}
+
+Other types of operations can be implemented, but first, a new revision of data formats should be made, to set the guidelines for all sensor implementations.
+
 \begin{figure}[htbp]
   \centering
     \includegraphics[scale=0.4]{Figures/data_format.pdf}
@@ -144,7 +158,7 @@ The Estimote format was left for us to analyze and provide the proper parsing ex
   \label{fig:estimote_format}
 \end{figure}
 
-\section{Value based SmartWatch Sensors}
+\section{ Value Based Smartwatch Sensors }
 
-\section{SWAN based Sensors for SmartWatch}
+\section{Expression  Based  Smartwatch Sensors }
 
