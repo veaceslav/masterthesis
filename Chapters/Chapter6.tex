@@ -60,15 +60,27 @@ Delay is set by us, but to avoid spending too much time on experiment, we will c
 
 \subsection{ Hypothesis Formulation}
 
-    We consider $\mu$ the battery power consumed by the test suite
+    We consider $\mu$ the battery power consumed by the test suite. Since we have two devices to measure power consumption from,
+    the $\mu$ will be calculated as $\delta$\textsubscript{phone} +  $\delta$\textsubscript{wear}, where $\delta$ is the difference in battery levels 
+    before and after the experiment.
     
+    Special case:\label{special_case} If the power consumption is better on phone but worse on watch for the given approach, we can not test the hypothesis:
+    \begin{itemize}
+     \item ($\delta$\textsubscript{wear test type 1} -  $\delta$\textsubscript{wear test type 2}) \textgreater  0
+     \item  ($\delta$\textsubscript{phone test type 1} -  $\delta$\textsubscript{phone test type 2}) \textless  0 
+    \end{itemize}
+    
+    The reason why we can't apply our hypotheses is because the smartwatch and the phone have different hardware, idle power consumption and 
+    battery installed. We can not compare them directly, but we can claim that one approach is better for phone but worse for watch and let the developers
+    make decision on what they want to value the most: Phone or watch battery.
+
     \textbf{Question 1:} What is the overhead of gathering data from smartwatch, compared to running evaluation on the watch? \newline
 Conjecture(P): There is a difference between gaining data and evaluating expression on the smartwatch is significant \newline
 Consequence(Q): The difference between only gaining data and evaluating expression on the smartwatch. \newline
 \textit{Null hypothesis} - No observable difference in power consumption between only gathering data and evaluating expression on the watch \newline
-H0 : ( $\mu$\textsubscript{phone} - $\mu$\textsubscript{wear} = 0) \newline
+H0 : ( $\mu$\textsubscript{phone based} - $\mu$\textsubscript{wear based} = 0) \newline
   Alternative hypothesis - There is a difference in power consumption between only gaining data on watch and running a SWAN expression on the watch \newline
-H1:($\mu$\textsubscript{phone} - $\mu$\textsubscript{wear} $\neq$ 0)  \newline
+H1:($\mu$\textsubscript{phone based} - $\mu$\textsubscript{wear based} $\neq$ 0)  \newline
 
     \textbf{Question 2:}  What is the overhead of gaining data from test sensor compared to real hardware sensor?\newline
     Conjecture(P): There is  a difference between using test sensor and real sensor on the smartwatch is significant\newline
@@ -370,3 +382,65 @@ for more power used.
 
 For watch based expression, the phone battery improvements are non-existent(or, at least do not surpass our error threshold the be considered a difference). On the other hand,
 a stable delay still translates into \textbf{ 5 to 10\%} less battery consumed on the watch as we can see in \hyperref[fig:wear_expr_consumption]{Figure 6.5}
+
+\section{Hypothesis Testing}
+After preliminary data analysis we notice that we don't have the \hyperref[special_case]{special case}, so we can proceed to test out hypothesis.
+
+\textit{Research Question 1:} What is the overhead of gathering data from smartwatch, compared to running evaluation on the watch? \newline
+Following the formulas described in Hypothesis Formulation section, we observe that for delay of 100 ms, phone based expressions consume 
+\textbf{34\% more} phone battery and \textbf{~20\% more } smartwatch battery. Taking into account the 5\% error by the imperfection of our instruments,
+we reject the Hypothesis H0, and accept the Hypothesis H1, for the given delay of 100 ms.
+
+For given delay of 1000ms, we observe that for delay of 100 ms, phone based expressions consume 
+\textbf{17\% more} phone battery and \textbf{~20\% more } smartwatch battery. Taking into account the 5\% error by the imperfection of our instruments,
+we reject the Hypothesis H0, and accept the Hypothesis H1.
+
+ \textit{Research Question 2:}  What is the overhead of gaining data from test sensor compared to real hardware sensor?\newline
+Following our further research of why the phone based expressions consume so much power, we wanted to test the sensor update delay, as a factor
+which increase the power consumption. Our test sensor implementation always honour the delay specified in the expression, compared to a very weak delay guarantee
+given by a real hardware sensor.
+
+For given delay of 100ms, hardware sensor consume \textbf{14\% more} phone battery and \textbf{~17\% more } smartwatch battery than the test sensor, assuming that both test and hardware
+sensor is implemented as phone based expression.
+Taking into account the 5\% error by the imperfection of our instruments, we reject the Hypothesis H0 and accept the Hypothesis H1.
+
+For given delay of 1000ms, hardware sensor consume \textbf{15\% more} phone battery and \textbf{~22\% more } smartwatch battery than the test sensor, assuming that both test and hardware
+sensor is implemented as phone based expression.
+Taking into account the 5\% error by the imperfection of our instruments, we reject the Hypothesis H0 and accept the Hypothesis H1.
+
+Comparing the wear based expressions is more complicated. We could not record any notable differences on phone battery during our tests, so we will focus on smartwatch battery.
+
+For given delay of 100ms,  hardware based sensor consumed \textbf{3\% more} watch battery than the test sensor.
+Our 5\% error rate require to have a difference of at least 1.5\% in battery levels (5\% of 30\% battery drop is equal to 1.5\%). We
+reject hypothesis H0 and accept Hypothesis H1.
+
+For given delay of 1000ms,  hardware based sensor consumed \textbf{9\% more} watch battery than the test sensor.
+Our 5\% error rate require to have a difference of at least 1\% in battery levels (5\% of 20\% battery drop is equal to 1\%). We
+reject hypothesis H0 and accept Hypothesis H1.
+
+\subsection{Final Results Discussion}
+
+After performing all the tests in out suite, we revealed that using phone based expression in current SWAN implementation is not a good idea.
+Specifically the phone is getting hot on low delays and the phone battery drop is one order of magnitude higher than using SWAN expression evaluation on the watch.
+
+After careful analysis we identified two possible reasons why phone based expression consumes so much power, but also what can further improve the smartwatch based expressions:
+\begin{itemize}
+ \item The hardware sensor does not honour the requested delay
+ \begin{itemize}
+  \item A lot of values are being sent over bluetooth and the phone has to drop them because they do not arrive in the given timestamp
+  \item Wear based expression drop values locally, so no extra values are sent over Bluetooth
+  \item Phone based test sensor show much better battery when the values arrive at given delay
+ \end{itemize}
+ \item SWAN mechanism of accepting values drops too many values, that were supposed to be accepted
+ \begin{itemize}
+  \item The Bluetooth and synchronization delay change the arrival time of the values, and the value accept function takes into consideration arrival time, not the time when values were recorded
+  \item Test Sensor revealed poor performance of the accept value implementation, which translates two times longer runtimes than predicted in our test scenarios.
+  \item Having the expected runtime as close as possible to real runtime can save battery
+ \end{itemize}
+
+ The accept values implementation performance needs to be further investigated.
+ As the result of our experiments we can conclude that the test sensor, with ideal delay, have lower battery consumption.
+ The excessive runtime as side effect of the test sensors, and log analysis(we record when the values are being dropped) give us some clues to the problem, but we didn't manage to fully isolate the
+ problem so we could say for sure that the accept method is responsible for long runtimes.
+
+\end{itemize}
