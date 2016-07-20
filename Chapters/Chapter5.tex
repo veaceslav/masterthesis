@@ -43,7 +43,7 @@ The most challenging part was to apply patches from the two different repositori
 lost, and patches were hard to apply. This also proves why you should always use the rebase option instead of merging option when you push commits
 to the remote. Atlassian article\cite{atlassian_merge_rebase} explains the main advantage of rebasing over using merging commits.
 
-\subsection{Splitting SWAN sources into libraries}
+\subsection{Splitting SWAN sources into libraries}\label{scc:swan_split}
 After the implementation of the smartwatch sensors and beacon sensors, as part of research topic, SWAN had to be ported on smartwatch.
 There were multiple options of how I was supposed to handle the challenge:
 \begin{itemize}
@@ -115,7 +115,7 @@ new way of using beacons:
  \item Estimote Nearable - Beacon Frame Format developed by Estimote\cite{estimote_company}, with accelerometer and movement data embedded into the format
 \end{itemize}
 
-The beacon implementation is revolving around adding support for the four beacon formats listed above. Implementation details were further split into
+The beacon implementation is revolving around adding support for the four beacon formats listed above. Implementation details were further split into 
 following steps:
 \begin{itemize}
  \item Implement Bluetooth Low Energy Scan
@@ -150,6 +150,9 @@ Original SWAN only allowed to return a single value of the primitive type. To co
 
 Other types of operations can be implemented, but first, a new revision of data formats should be made, to set the guidelines for all sensor implementations.
 
+Our implementation relies on a singleton class which gets the result of the scanning and then distributes it to all registered beacon sensors. The AltBeacon library will automatically stop scanning
+if no beacon sensors are registered.
+
 \begin{figure}[htbp]
   \centering
     \includegraphics[scale=0.4]{Figures/data_format.pdf}
@@ -159,6 +162,32 @@ Other types of operations can be implemented, but first, a new revision of data 
 \end{figure}
 
 \section{ Value Based Smartwatch Sensors }
+Implementing the value based smartwatch sensor was the first option and it derived from the Android's guidelines of performing the minimum amount of computation on the watch.
+The other requirement was to keep code for Android Wear as small as possible, since the performance of the integrated components is lower compared to computing power on the smartphone.
+
+To keep the implementation simple, we have a singleton class  responsible for communication between the smartphone and watch. We also issue start and stop commands to our service on the smartwatch,
+so when no smartwatch sensor is active, the SWAN will not run on the watch.
+
+We used the data path \cite{android_wear_datapath} for reliable communication between devices. The use of data path guarantee that the value will always be delivered at the cost of increased delay
+and jitter\cite{jitter_ref} which affect our delay enforcing policy in SWAN.
+
+The watch service is implemented as a foreground service\cite{foreground_service}. Running in foreground requires us to display the notification on the watch, but on the other hand we have the 
+guarantee that our service will not be put to sleep by the operating system. 
+Each SWAN sensor on the phone  is able to send start and stop commands, and the watch service will always count how many sensors are active. When no sensors are active, the service will stop.
+
+Despite the Google's guidelines of keeping the Android Wear applications small, value based smartwatch sensors have poor energy efficiency. More about the power consumption experiment, 
+in \hyperref[Chapter6]{Chapter 6}.
 
 \section{Expression  Based  Smartwatch Sensors }
 
+Expression based smartwatch sensor implementation aims to bring SWAN on your smartwatch. Before, we didn't consider to have SWAN on the watch a good idea. SWAN is a big application and running
+it on the watch could result in sever performance issues on the watch. The opportunity on running SWAN on watch arisen after we managed to split SWAN source-code into \hyperref[scc:swan_split]{multiple libraries
+}. Some performance incurring features, such as database storage were left behind, and now the source-code was small enough to run on watch.
+
+Compared to normal SWAN expression, a wear expression have \hyperref[fig:SwanExpression]{location string} set to \textbf{wear} keyword. Evaluation Engine is responsible for changing the location
+to \textbf{self} and forwarding the expression to SWAN on smartwatch.
+The implementation of expression based smartwatch sensors added on top of the existing value based implementation. New commands were added to start and stop a swan expression on the watch.
+The values sent back use the same implementation as for value based sensors. 
+
+The main difference between value based and expression based sensors is that the values are not sent to SWAN sensor implementation for evaluation, but rather added to Evaluation Engine list of cached
+values. This approach offer very low power consumption on the phone, as we can see from the power analysis in \hyperref[Chapter6]{Chapter 6}.
