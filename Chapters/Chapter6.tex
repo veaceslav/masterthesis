@@ -20,7 +20,7 @@ The current implementation of the SWAN WEAR allows us to choose which way we wan
 Typically the recommended approach is to minimize the computation on the watch to save battery, but in certain cases,  when expression does not require frequent evaluation, we might get better power savings if we choose to perform the evaluation on the watch.
 
 \section{Design}
-Before proceeding to the data analysis, according to the GQM[4] paradigm, we should define the goal, the questions and the metrics.
+Before proceeding to the data analysis, according to the GQM\cite{gqm_1}\cite{gqm_2} paradigm, we should define the goal, the questions and the metrics.
     Our goal is to \textbf{analyze the power consumption} of phone and smartwatch, for the purpose of \textbf{comparing two different methods of acquiring sensor data}
     with respect to \textbf{differences in power consumption of phone and smartwatch}, in context of \textbf{SWAN android application}.
 
@@ -184,7 +184,7 @@ External: The experiment is being performed on specific setup. Even if the devic
 the android market is fragmented, and different android versions, hardware and smartwatches can yield to a different result
 
 Internal: Basing our power consumption  results on battery levels increase the total error rate. Non linear discharge rate,
-battery wear[5] can influence the final conclusion. To avoid these battery limitations, we will perform tests only when the battery is fully charged, 
+battery wear level\cite{battery_wear_proc} can influence the final conclusion. To avoid these battery limitations, we will perform tests only when the battery is fully charged, 
 so the discharge pattern will be the same. Also to reduce the battery wear impact, the tests will be performed with limited time delay,
 and without any phone or smartwatch usage between the tests.
 
@@ -227,7 +227,7 @@ and without any phone or smartwatch usage between the tests.
  The power consumption should be measured on both phone and android wear device, so we could better understand what are the pros and cons of using each method.
  We have two methods of measuring the power consumption:
  \begin{itemize}
-  \item Using the android battery starts, which provide the current power draw if the device is equipped with a hardware fuel gauge(Our test devices Nexus 6P and Moto 360 gen 2 )[1]
+  \item Using the android battery starts, which provide the current power draw if the device is equipped with a hardware fuel gauge(Our test devices Nexus 6P and Moto 360 gen 2 )\cite{fuel_gauge}
   \item The standard setup: Running each method for a prolonged amount of time and measure the battery level after the experiment is done
  \end{itemize}
 
@@ -263,7 +263,7 @@ The experiment steps should be performed in the following order:
 
 For the testing purpose, we will avoid sensors that are dependent of user motion to actually work: 
 \begin{itemize}
- \item Step counter sensor - will send updates only if the user walked after last query. It might also be related to hardware implementation of the sensor in our test device. 
+ \item Step counter sensor - will send updates only if the user walked after last query. It might also be related to hardware implementation of the sensor in our test device\cite{motorolla_stepcounter}. 
  \item Light sensor - the updates are triggered by changes in light level and since our test setup is configured to run for a long time, we can not include a sensor triggered by external,
  undefined behaviour
 \end{itemize}
@@ -290,7 +290,7 @@ Also we should take into consideration the charging time necessary after each ru
 with smartwatch normally loosing the biggest battery percentage  and having long recharge times.
 
 \subsection{Test Application}
-The test application was build in order to run tests in batch order and gather the battery level data. To avoid power consumption from external sources, such as phone screen, we implemented the testing code as foreground service[3] which is not hibernated by the android system when the screen is off. 
+The test application was build in order to run tests in batch order and gather the battery level data. To avoid power consumption from external sources, such as phone screen, we implemented the testing code as foreground service\cite{foreground_service} which is not hibernated by the android system when the screen is off. 
 The testing application has the following workflow:
 For each SWAN expression:
 \begin{itemize}
