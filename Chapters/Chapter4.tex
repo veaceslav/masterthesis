@@ -18,7 +18,7 @@ Also, History reduction is important when using the single value.
 
 By adding multiple sensors, it became clear that taking a single value is not scalable enough. 
 The further changes were delayed by adding multiple value paths to the sensor implementation. 
-A clear example was accelerometer data: You will probably need the values for all 3 axis: x, y, z.
+A clear example was accelerometer data: You will probably need the values for all 3 axes: x, y, z.
 And you need to register 3 expressions for each value path.
 The limitation can no longer be avoided after implementing Beacon Sensors, because now we need to add a full array of beacon identifiers under the same timestamp,
 the key-value to provide individual temperature data or even key-array of values if we want the accelerometer data from all beacons.
@@ -27,9 +27,9 @@ the key-value to provide individual temperature data or even key-array of values
 %	SUBSECTION 1
 %-----------------------------------
 \section{Proposed Solutions}
-All the proposed solutions should met the following requirements:
+All the proposed solutions should meet the following requirements:
 \begin{itemize}
- \item Support multiple sensors of the same type(beacon sensor)
+ \item Support multiple sensors of the same type (beacon sensor)
  \item Support multiple values for each sensor
  \item Provide scheme for single sensor single value data
  \item Provide implementation for Evaluation Engine Application
@@ -37,7 +37,7 @@ All the proposed solutions should met the following requirements:
 
 \subsection{Data Mapping approach}
 Data Mapping tries to solve the problem by proposing a new, novel approach of how data is being passed form the sensor
-to the evaluation engine. The model is aiming to solve future problems when in comes to supporting multiple sensors
+to the evaluation engine. The model is aiming to solve future problems when it comes to supporting multiple sensors
 with multiple values at the same time. The drawback of this solution is the number of changes that are required to be done in
 Evaluation Engine and sensors, in order to implement the new approach. Also there is a high risk of breaking compatibility
 with older expressions.
@@ -50,7 +50,7 @@ The format of data for the following function calls(value parameter):
 					final Object value):
 \end{lstlisting}
 
-In order to satisfy the new requirements we propose the new data format to be encoded as: \begin{verbatim} Map<ValuePath, Map<sensorID,  ArrayList<Object>> \end{verbatim}
+In order to satisfy the new requirements, we propose the new data format to be encoded as: \begin{verbatim} Map<ValuePath, Map<sensorID,  ArrayList<Object>> \end{verbatim}
 
 where:
 \begin{itemize}
@@ -145,7 +145,7 @@ The recommended swan expressions for the 4 categories of sensors:
 
 \end{itemize}
 
-Note this expressions can not be evaluated by Evaluation Engine, because it outputs an array instead of a single value.
+Note these expressions can not be evaluated by Evaluation Engine, because it outputs an array instead of a single value.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
@@ -157,7 +157,7 @@ The while the Data Mapping approach brings more novelty, it comes with severe di
 \begin{itemize}
  \item Unable to keep backward compatibility with older applications which are using SWAN - before the changes, applications
  expect a single primitive value. Using an array or a map may result in application crashes.
- \item While the Value Based Expressions are easy to adapt, changing TriState Expressions is more difficult - Evaluation engine needs to be redesigned to adapt the new approach
+ \item While the Value Based Expressions are easy to adapt, changing Tristate Expressions is more difficult - Evaluation engine needs to be redesigned to adapt the new approach
  \item Big number of changes may render SWAN unstable and it will take a long time to narrow down bugs
 \end{itemize}
 

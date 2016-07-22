@@ -24,9 +24,9 @@ Each of this changes had a big impact on SWAN and could bring unexpected bugs.
 
 \subsection{Merging multiple SWAN repositories}
 At the beginning of the master thesis project, the main repository of SWAN has holding the stable version of it, which was being used in production 
-by a the company. Our SWAN project has a big team, each member work on different part of the SWAN or SWAN related functionality.
+by a  company. Our SWAN project has a big team, each member work on different part of the SWAN or SWAN related functionality.
 To avoid any breaking changes to the current SWAN version, I decided to make a different branch and put all my smartwatch related changes in it.
-When I was done with implementing the first prototype of SWAN WEAR sensors, other phD students's projects: SWAN Plus and IoT SWAN were also ready.
+When I was done with implementing the first prototype of SWAN WEAR sensors, other PhD students' projects: SWAN Plus and IoT SWAN were also ready.
 Unfortunately, the commits of the projects stated above were in different repositories so merging them into master branch was proven to be difficult.
 We followed this procedure when merging the SWAN:
 \begin{itemize}
@@ -77,7 +77,7 @@ The new package format can be built and uploaded directly from Android Studio. A
 the library versions should be updated accordingly:
 
 \begin{itemize}
- \item If any change or addition  in the library was made, increment the patch version number : 1.0.0 $\rightarrow$1.0.1
+ \item If any change or addition  in the library was made, increment the patch version number: 1.0.0 $\rightarrow$1.0.1
  \item If any public class or Enumeration was deleted, increment the minor version: 1.0.0 $\rightarrow$ 1.1.0 
  \item The major version should be only incremented with SWAN major version: 1.0.0 $\rightarrow$ 2.0.0
 \end{itemize}
@@ -92,7 +92,7 @@ The new data specifications which include beacon extension are discussed in \hyp
 Before exploring the implementation details we must discuss the available Beacon technology and Beacon Frame format.
 The Bluetooth Low Energy Beacons can broadcast various data with different transmission power and broadcast interval.
 The broadcast power is measured in dBm\cite{dbiRef}. The transmission power can vary from -30dBm and +4dBm. Higher transmit power
-increase the range, but also shorten the battery life. The broadcast interval can vary from 300ms to more than 5 seconds. Higher resolution improve the accuracy of data,
+increase the range, but also shorten the battery life. The broadcast interval can vary from 300ms to more than 5 seconds. Higher resolution improves the accuracy of data,
 especially for real-time applications, but also shorten the battery life.
 
 To avoid the fragmentation of the Beacon Market, Google and Apple stepped in and proposed two standards for Beacon Frame Layout:
@@ -107,7 +107,7 @@ To avoid the fragmentation of the Beacon Market, Google and Apple stepped in and
 \end{itemize}
 
 The standards from above are industry recognized and widely implemented by various Beacon Manufacturers.
-Unfortunately even the Google Eddystone Format is not flexible enough and some companies need to come up with their own format to support extra functionality 
+Unfortunately, even the Google Eddystone Format is not flexible enough and some companies need to come up with their own format to support extra functionality 
 added to  their beacon products. We will also discuss the following frame formats which are proprietary to companies selling the test beacons, but they enable us to explore the
 new way of using beacons:
 \begin{itemize}
@@ -125,7 +125,7 @@ following steps:
 \end{itemize}
 
 \subsection{AltBeacon Library}
-The AltBeacon Library is deleveloped by Radius Networks company and provide a free and open-source implementation for applications that want to scan for beacons.
+The AltBeacon Library is developed by Radius Networks company and provide a free and open-source implementation for applications that want to scan for beacons.
 We choose to use this library over a custom implementation because of the easy way to add new beacon format. The library does not support beacons with encrypted 
 identifiers, but it allows us to parse almost any existing, non-encrypting beacon frame. A proof of flexibility is our beacon layout for Estimote Nearable that we were able to 
 implement in SWAN.
@@ -134,14 +134,14 @@ pattern, and register all sensors that want to access beacon data in our singlet
 
 \subsection{Beacon Frame Formats}
 The support for Apple iBeacon, Eddystone UID, Eddystone TLM, Eddystone URL and AltBeacon Format was already available in the library.
-The Estimote format was left for us to analyze and provide the proper parsing expression to the AltBeacon Library.
+The Estimote format was left for us to analyse and provide the proper parsing expression to the AltBeacon Library.
 
 The process of parsing the non- standard frame starts with finding the specifications for each byte in the frame. Fortunately, we found a NodeJs implementation 
 who parses the Estimote Nearable Frame. The data encoded is presented in \hyperref[fig:estimote_format]{Figure 5.1}.
 Before decoding the data we must tell the AltBeacon Library where to look for the frame identifier. The debugging mode allows us to see how the Bluetooth Low Energy frames are being parsed.
 
 \subsection{Retrieving data from specific Beacons}
-Original SWAN only allowed to return a single value of the primitive type. To comply with the new SWAN Data Specifications we test the location part of expression to see which information we should provide:
+Original SWAN only allowed to return a single value of the primitive type. To comply with the new SWAN Data Specifications, we test the location part of expression to see which information we should provide:
 
 \begin{itemize}
  \item If location is \textbf{self} we retrieve a random beacon from the list, which matches our frame type and give the result to the user
@@ -181,13 +181,12 @@ in \hyperref[Chapter6]{Chapter 6}.
 \section{Expression  Based  Smartwatch Sensors }
 
 Expression based smartwatch sensor implementation aims to bring SWAN on your smartwatch. Before, we didn't consider to have SWAN on the watch a good idea. SWAN is a big application and running
-it on the watch could result in sever performance issues on the watch. The opportunity on running SWAN on watch arisen after we managed to split SWAN source-code into \hyperref[scc:swan_split]{multiple libraries
-}. Some performance incurring features, such as database storage were left behind, and now the source-code was small enough to run on watch.
+it on the watch could result in sever performance issues on the watch. The opportunity on running SWAN on watch arisen after we managed to split SWAN source-code into \hyperref[scc:swan_split]{multiple libraries}. Some performance incurring features, such as database storage were left behind, and now the source-code was small enough to run on watch.
 
-Compared to normal SWAN expression, a wear expression have \hyperref[fig:SwanExpression]{location string} set to \textbf{wear} keyword. Evaluation Engine is responsible for changing the location
+Compared to normal SWAN expression, a wear expression has the \hyperref[fig:SwanExpression]{location string} set to \textbf{wear} keyword. Evaluation Engine is responsible for changing the location
 to \textbf{self} and forwarding the expression to SWAN on smartwatch.
 The implementation of expression based smartwatch sensors added on top of the existing value based implementation. New commands were added to start and stop a swan expression on the watch.
 The values sent back use the same implementation as for value based sensors. 
 
 The main difference between value based and expression based sensors is that the values are not sent to SWAN sensor implementation for evaluation, but rather added to Evaluation Engine list of cached
-values. This approach offer very low power consumption on the phone, as we can see from the power analysis in \hyperref[Chapter6]{Chapter 6}.
+values. This approach offers very low power consumption on the phone, as we can see from the power analysis in \hyperref[Chapter6]{Chapter 6}.
