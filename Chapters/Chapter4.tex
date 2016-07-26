@@ -103,7 +103,7 @@ We identify four sensor formats and recommend the following representation for e
 \subsection{Expression Location Approach} \label{sssec:exprlocation}
 Compared to the Data Mapping, Expression Location Approach tries to preserve the single return value and value paths for each sensor.
 It works in addition to the current implementation and maintain the backwards compatibility with the previous expression format.
-The drawback of this approach is very low flexibility when the number of sensors are really high. Also this approach tries to solve an immediate 
+The drawback of this approach is very low flexibility when the number of sensors are really high. Also , it tries to solve an immediate 
 problem rather than focusing on future challenges.
 
 Instead of using a map to send the values to the evaluation engine, we add an extension to the current location of the swan expression.
@@ -162,7 +162,9 @@ The while the Data Mapping approach brings more novelty, it comes with severe di
 \end{itemize}
 
 On the other hand, the Location Based does not interfere with Evaluation Engine's algorithm, and location can be easily passed to the sensor implementation and 
-handled by sensor implementations. Implementing the location extension was easy, we just added an extra Map of parameters which we pass to the sensor
+handled by sensor implementations. 
+
+Implementing the location extension was easy, we just added an extra parameter of type \textbf{Map} which we pass to the sensor
 when we bind it.
 The existing sensors preserved their implementation without changes and the beacon based sensors were adapted to get the beacon ID from the location parameters.
 Also, for Bluetooth sensor discovery purpose, we left the Discovery sensor to output an array instead of a single value, assuming that no Tri-State Expression will be registered with that 

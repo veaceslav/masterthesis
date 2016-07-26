@@ -12,36 +12,16 @@
 
 \section{Swan Application Layout}
 In the process of implementing the support for SWAN WEAR and Beacon Based Sensor, SWAN application layout has changed dramatically.
+
 We will cover the following main changes operated to SWAN project structure during the last 6 months:
 \begin{itemize}
- \item Merging multiple SWAN repositories
  \item Splitting the SWAN project sources in libraries
  \item Uploading the SWAN JARS in publicly available repository - JCenter
 \end{itemize}
 
-Each of this changes had a big impact on SWAN and could bring unexpected bugs.
+Before each change change from above were made,  a merge of all SWAN repositories was made. You can read more about it in \hyperref[AppendixB]{Appendix B}.
+Big changes on the project structure have a big impact on SWAN and could bring unexpected bugs.
 
-
-\subsection{Merging multiple SWAN repositories}
-At the beginning of the master thesis project, the main repository of SWAN has holding the stable version of it, which was being used in production 
-by a  company. Our SWAN project has a big team, each member work on different part of the SWAN or SWAN related functionality.
-To avoid any breaking changes to the current SWAN version, I decided to make a different branch and put all my smartwatch related changes in it.
-When I was done with implementing the first prototype of SWAN WEAR sensors, other PhD students' projects: SWAN Plus and IoT SWAN were also ready.
-Unfortunately, the commits of the projects stated above were in different repositories so merging them into master branch was proven to be difficult.
-We followed this procedure when merging the SWAN:
-\begin{itemize}
- \item Create the release branch with the old, stable SWAN
- \item Create development branches for SWAN Plus and IoT SWAN
- \item Export commits from SWAN Plus and IoT SWAN as patches
- \item Apply the patches to each development branch
- \item Merge Smartwatch code into Master
- \item Merge SWAN Plus into master and resolve conflicts
- \item Merge IoT SWAN into master and resolve conflicts
-\end{itemize}
-
-The most challenging part was to apply patches from the two different repositories. Merging commits were the reason why some history was 
-lost, and patches were hard to apply. This also proves why you should always use the rebase option instead of merging option when you push commits
-to the remote. Atlassian article\cite{atlassian_merge_rebase} explains the main advantage of rebasing over using merging commits.
 
 \subsection{Splitting SWAN sources into libraries}\label{scc:swan_split}
 After the implementation of the smartwatch sensors and beacon sensors, as part of research topic, SWAN had to be ported on smartwatch.
@@ -65,7 +45,7 @@ The first three components were separated from the SWAN Phone application and ad
 was still present and it had to be removed from the code, since the implementation was relevant only for phone and not for the smartwatch.
 To preserve the functionality, all the methods depending on Proximity Manager and Beacon Discovery were replaced with empty bodies and the Evaluation Engine on
 the phone was sub-classing the Evaluation Engine in the library and implementing the missing functionality.
-The same design was applied to Abstract SWAN Sensor who was relying on Sense Android Library to offload values[cite].
+The same design was applied to Abstract SWAN Sensor who was relying on Sense Android Library to offload values\cite{swan_layer}.
 
 After \textbf{Swan Core} was made independent, we decided to extract \textbf{Swan Song} and \textbf{Swan Interface} from it and make them separate libraries.
 The main reason for this library separation was the way applications interact with SWAN. Swan Interface are often imported as a separate jar in any application that want to register a 
@@ -125,7 +105,7 @@ following steps:
 \end{itemize}
 
 \subsection{AltBeacon Library}
-The AltBeacon Library is developed by Radius Networks company and provide a free and open-source implementation for applications that want to scan for beacons.
+The AltBeacon Library is developed by Radius Networks\cite{radius_networks} company and provide a free and open-source implementation for applications that want to scan for beacons.
 We choose to use this library over a custom implementation because of the easy way to add new beacon format. The library does not support beacons with encrypted 
 identifiers, but it allows us to parse almost any existing, non-encrypting beacon frame. A proof of flexibility is our beacon layout for Estimote Nearable that we were able to 
 implement in SWAN.

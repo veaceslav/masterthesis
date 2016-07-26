@@ -136,16 +136,13 @@ showstringspaces=false}
 
 A typical mobile phone applications will most likely want to take better advantage of the sensors embedded in the phone.
 It is easy to access data about sensors on an Android device but things start to be difficult when we want good battery savings.
-The best case scenario we will want to delegate all the troubles of having efficient implementation to a library, or a middleware project, such as SWAN.
-SWAN offer a simple and intuitive way to get data from available sensors, just by registering a simple expression.
-To make things even simpler, it offer a  configuration activity for the given sensor, so that developers can learn faster what options are available to them and how to get the best expressions for the needs. 
+The best case scenario is to delegate all the troubles of having efficient implementation to a library, or a middleware project, such as SWAN.
+SWAN offers a simple and intuitive way to get data from available sensors, just by registering a simple expression.
+To make things even simpler, there is  a  configuration activity for the given sensor, so that developers can learn faster what options are available to them and how to get the best expressions for the needs. 
  The sensors in the phone offer great flexibility but with proximity sensors it becomes increasingly difficult to preserve the original design.
- For example applications want to take advantage from sensors located in Bluetooth connected smartwatch or nearby beacons . 
+ For example applications want to take advantage from sensors located on Bluetooth connected smartwatch or nearby beacons . 
 The functionality offered by SWAN extends beyond the simple sensor data retrieval. 
-Advanced scenarios include waking up the application when the sensor value exceed a certain threshold. This allow applications to be closed and only wake up only when a certain event occurs.
- We will further discuss about smartwatch and beacon sensor implementation in SWAN. 
-The most important topics covered are the  application design solutions, data format specifications and extensive information
-about power efficiency of different data retrieval methods on smartwatch.  
+Advanced scenarios include waking up the application when the sensor value exceed a certain threshold. This allow applications to sleep and only wake up when a certain event occurs. 
 
 
 
@@ -161,8 +158,9 @@ about power efficiency of different data retrieval methods on smartwatch.
 \setstretch{1.3} % Reset the line-spacing to 1.3 for body text (if it has changed)
 
 \acknowledgements{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
+We thank the municipality of Alkmaar for sponsoring us with Bluetooth Low Energy Beacons, Android Smartwatch and other Bluetooth connected devices used for this project.
+I would like to thank Prof. Henri Bal, PhD Roshan Bharath Das  and Drs. Kees Verstoep for their valuable help.
 
-The acknowledgements and the people to thank go here, don't forget to include your project advisor :)  
 }
 \clearpage % Start a new page
 
@@ -263,7 +261,7 @@ The acknowledgements and the people to thank go here, don't forget to include yo
 % Uncomment the lines as you write the Appendices
 
 \input{Appendices/AppendixA}
-%\input{Appendices/AppendixB}
+\input{Appendices/AppendixB}
 %\input{Appendices/AppendixC}
 
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics

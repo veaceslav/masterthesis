@@ -271,6 +271,8 @@ For the testing purpose, we will avoid sensors that are dependent of user motion
 Surprisingly, the Heart Rate Sensor will still give you values even if it is not mounted on the wrist, so we can use it for our test purpose. 
 Heart rate sensor is different compared to regular sensors found on the phone. The smallest granularity for heart rate results is one second,
 so specifying a smaller delay will not make any sense.  Delays bigger than one second instead will fulfilled by SWAN implementation.
+Unfortunately, due to different delay, we could not prove that heart rate sensor consume the same amount of power as the rest of sensors in the suite.
+We still provide our findings, but we will not include heart rate in power comparisons.
  
  \subsection{Preliminary Tests}
 Preliminary tests shows us that we cannot rely on the estimated power reported by the fuel gauge sensors. In case of our phone device,
@@ -279,7 +281,6 @@ but we can not use it in our tests, since it will interfere with our test setup.
 We encountered the similar problem on our smartwatch, Motorola 360 generation 2. 
 The reported value in Nano-watts was not corresponding with the maximum theoretical energy that the watch battery is able to hold, according to the specifications.
 The current power consumption value.
-On the other hand, the formulas for running the specified amount of time are accurate, we recorded a deviation of +- 5\% of run time for different types of sensors 
 
 To get comparable results we are supposed to guarantee equal conditions for both test scenarios.
 Since SWAN is quite power efficient and sensors that we are targeting are also very power efficient, the test should run for a long period of time.
@@ -288,6 +289,7 @@ Running tests for longer period of time can help us identify even smaller differ
 but the necessity of running the experiments with different type of expressions and also the number of repetitions for each scenario make the use of longer runtimes prohibitive.
 Also we should take into consideration the charging time necessary after each run of the experiment,
 with smartwatch normally losing the biggest battery percentage  and having long recharge times.
+
 
 \subsection{Test Application}
 The test application was built in order to run tests in batch order and gather the battery level data. To avoid power consumption from external sources, such as phone screen, we implemented the testing code as foreground service\cite{foreground_service} which is not hibernated by the android system when the screen is off. 
@@ -315,7 +317,7 @@ We are actually required to wait for the SWAN expression to terminate, so we sen
  \section{Results}
 
 We performed all experiments according to the Experiment Design and we obtained a lot of data. To improve readability,
-we decided not to include all the raw data in this chapter. If you are interested to see the raw data, check Appendix A, for tables containing the
+we decided not to include all the raw data in this chapter. If you are interested to see the raw data, check \hyperref[AppendixPower]{Appendix A}, for tables containing the
 average values of 3 experiments.
 
 \subsection{Preliminary Analysis}
