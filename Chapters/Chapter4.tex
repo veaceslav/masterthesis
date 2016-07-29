@@ -35,10 +35,12 @@ All the proposed solutions should meet the following requirements:
  \item Provide implementation for Evaluation Engine Application
 \end{itemize}
 
+We will further discuss two options that meet the requirements from above.
+
 \subsection{Data Mapping approach}
-Data Mapping tries to solve the problem by proposing a new, novel approach of how data is being passed form the sensor
+Data Mapping tries to solve the problem by proposing a new approach of how data is being passed form the sensor
 to the evaluation engine. The model is aiming to solve future problems when it comes to supporting multiple sensors
-with multiple values at the same time. The drawback of this solution is the number of changes that are required to be done in
+with multiple values at the same time. The drawback of this solution is the number of changes that are required to be done in the
 Evaluation Engine and sensors, in order to implement the new approach. Also there is a high risk of breaking compatibility
 with older expressions.
 
@@ -54,7 +56,7 @@ In order to satisfy the new requirements, we propose the new data format to be e
 
 where:
 \begin{itemize}
- \item ValuePath  = sensor valuepaths, ex Acceleromter x, y, z, total
+ \item ValuePath  = sensor valuepaths, ex Accelerometer x, y, z, total
  \item sensorID  =  self or unique Sensor Identifier(BeaconID)
 \end{itemize}
 
@@ -94,24 +96,22 @@ We identify four sensor formats and recommend the following representation for e
 \end{itemize}
 
 
-
-
 %-----------------------------------
 %	SUBSECTION 2
 %-----------------------------------
 
 \subsection{Expression Location Approach} \label{sssec:exprlocation}
-Compared to the Data Mapping, Expression Location Approach tries to preserve the single return value and value paths for each sensor.
-It works in addition to the current implementation and maintain the backwards compatibility with the previous expression format.
-The drawback of this approach is very low flexibility when the number of sensors are really high. Also , it tries to solve an immediate 
+Compared to the Data Mapping, the  Expression Location Approach tries to preserve the single return value and value paths for each sensor.
+It works in addition to the current implementation and maintains the backwards compatibility with the previous expression format.
+The drawback of this approach is very low flexibility when the number of sensors are really high. Also, it tries to solve an immediate 
 problem rather than focusing on future challenges.
 
-Instead of using a map to send the values to the evaluation engine, we add an extension to the current location of the swan expression.
-The evaluation engine recognize keywords such as \textbf{self}, \textbf{wear} and \textbf{remote}. To support the multiple sensors, 
+Instead of using a map to send the values to the evaluation engine, we add an extension to the current location of the SWAN expression.
+The evaluation engine recognizes keywords such as \textbf{self}, \textbf{wear} and \textbf{remote}. To support the multiple sensors, 
 we add the sensor's unique identifier instead of the location. In case of Beacons, each beacon has beacon Id, which should be unique for 
 all kind of applications.
 
-The recommended swan expressions for the 4 categories of sensors:
+The recommended SWAN expressions for the 4 categories of sensors:
 
 \begin{itemize}
   \item Single Sensor Single Value(sensor name = stepcounter):
@@ -153,15 +153,15 @@ Note these expressions can not be evaluated by Evaluation Engine, because it out
 
 \section{Implemented Approach}
 The implemented solution was the \hyperref[sssec:exprlocation]{Expression Location Approach}.
-The while the Data Mapping approach brings more novelty, it comes with severe disadvantages:
+While the Data Mapping approach brings more novelty, it comes with severe disadvantages:
 \begin{itemize}
  \item Unable to keep backward compatibility with older applications which are using SWAN - before the changes, applications
  expect a single primitive value. Using an array or a map may result in application crashes.
- \item While the Value Based Expressions are easy to adapt, changing Tristate Expressions is more difficult - Evaluation engine needs to be redesigned to adapt the new approach
+ \item While the Value Based Expressions are easy to adapt, changing \hyperref[swan_song_expressions]{Tristate Expressions} is more difficult - Evaluation engine needs to be redesigned to adapt the new approach
  \item Big number of changes may render SWAN unstable and it will take a long time to narrow down bugs
 \end{itemize}
 
-On the other hand, the Location Based does not interfere with Evaluation Engine's algorithm, and location can be easily passed to the sensor implementation and 
+On the other hand, the Location Based approach does not interfere with the Evaluation Engine's algorithm, and location can be easily passed to the sensor implementation and 
 handled by sensor implementations. 
 
 Implementing the location extension was easy, we just added an extra parameter of type \textbf{Map} which we pass to the sensor
