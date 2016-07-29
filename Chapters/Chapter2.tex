@@ -11,21 +11,21 @@
 %----------------------------------------------------------------------------------------
 
 \section{General}
-For our implementation of smartwatch sensors and Bluetooth beacon sensors we used standard Android API to send, scan and receive information.
-There are other ways of communicating with the smartwatch, for example using Beetle\cite{beetle_mobisys16} service to communicate with smartwatch.
-Using Beetle, it is also possible to retrieve data from heart rate monitor in real time, in a similar way of how our SWAN service on the watch works.
+For our implementation of smartwatch sensors and Bluetooth beacon sensors we used the standard Android API to send, scan and receive information.
+There are other ways of communicating with the smartwatch, for example using Beetle\cite{beetle_mobisys16} service.
+Using Beetle, it is also possible to retrieve data from heart rate monitors in real time, in a similar way of how our SWAN service on the watch works.
 
-The implementation on the SWAN service on the smartwatch does not have notable differences compared to a regular android phone application.
+The implementation on the SWAN service on the smartwatch does not have notable differences compared to a regular Android phone application.
 An extensive description of the operating system on the watch is available  in Understanding Characteristics of Android Wear\cite{android_wear_char}.
 In comparison with our power consumption experiment, the paper's experiment was performed  with power monitors attached 
 directly to hardware, which gives higher accuracy.
 
-The ArmTrak\cite{arm_trak} program, which aims to better understand user's hand gestures, is implemented using the same approach as out phone based 
-smartwatch sensors. ArmTrak require high accuracy and low latency for some scenarios, and with the new wear based SWAN expressions, some computation can be
+The ArmTrak\cite{arm_trak} program, which aims to better understand user's hand gestures, is implemented using the same approach as our phone based 
+smartwatch sensors. ArmTrak requires high accuracy and low latency for some scenarios, and with the new wear based SWAN expressions, some computation can be
 done locally, on the watch.
 
 \section{Swan Plus}
-SWAN Plus\cite{swan_plus} project, which aims to offer expression evaluation on nearby devices, is closely related to our work on adding support for smartwatches and Bluetooth devices.
-Our implementation of sending SWAN expressions on the watch was coded on top of already existing mechanism of sending expressions to nearby devices and forwarding results back to the expression
+The SWAN Plus\cite{swan_plus} project, which aims to offer expression evaluation on nearby devices, is closely related to our work on adding support for smartwatches and Bluetooth devices.
+Our implementation of sending SWAN expressions on the watch was coded on top of an already existing mechanism of sending expressions to nearby devices and forwarding results back to the expression
 registrar. On the other hand, SWAN Plus focuses on multiple devices and uses a more close-to-metal approach of scanning and discovering the Bluetooth devices.
 
