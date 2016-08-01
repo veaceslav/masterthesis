@@ -417,9 +417,10 @@ For given delay of 1000ms,  hardware based sensor consumed \textbf{9\% more} wat
 Our 5\% error rate requires to have a difference of at least 1\% in battery levels (5\% of 20\% battery drop is equal to 1\%). We
 reject hypothesis H0 and accept Hypothesis H1.
 
-\subsection{Final Results Discussion}
+\section{Final Results Discussion}
 
 After performing all the tests from our suite, we revealed that using phone based expression in current SWAN implementation is not a good idea.
+
 Specifically, the phone is getting hot on low delays and the phone battery drop is one order of magnitude higher than using SWAN expression evaluation on the watch.
 
 After careful analysis we identified two possible reasons why phone based expression consumes so much power, but also what can further improve the smartwatch based expressions:
@@ -430,12 +431,24 @@ After careful analysis we identified two possible reasons why phone based expres
   \item Wear based expression drop values locally, so no extra values are sent over Bluetooth
   \item Phone based test sensor show much better battery when the values arrive at given delay
  \end{itemize}
- \item The SWAN mechanism of accepting values drops too many values, that were supposed to be accepted
+ \item The SWAN mechanism of accepting values drops too many values, that were supposed to be accepted\footnote{See Figure 6.6 and the explanation below}
  \begin{itemize}
   \item The Bluetooth and synchronization delay change the arrival time of the values, and the value accept function takes into consideration arrival time, not the time when values were recorded
   \item Test Sensor revealed poor performance of the accept value implementation, which translates two times longer runtimes than predicted in our test scenarios.
   \item Having the expected runtime as close as possible to real runtime can save battery
  \end{itemize}
+
+  \begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.5]{Figures/swan_drop_val.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Dropping values in Phone and Wear Based Expressions]{Dropping values in Phone and Wear Based Expressions}
+  \label{fig:swan_drop_val}
+\end{figure}
+
+Furthermore, we noticed that hardware sensors will not enforce the delay and SWAN should take care about this. As we can see in \hyperref[fig:swan_drop_val]{Figure 6.6}, 
+phone based approach will drop the values after they were sent through Bluetooth, while in the wear based expressions, values are dropped locally, which translates into less power consumption.
+Even with out test sensor, some values are dropped because of the extra delay incurred by Bluetooth.
 
  The accept values implementation performance needs to be further investigated.
  As the result of our experiments we can conclude that the test sensor, with ideal delay, has lower battery consumption.
