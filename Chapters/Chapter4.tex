@@ -1,16 +1,19 @@
 % Chapter Template
 
-\chapter{SWAN Data Specifications}\label{ssec:swandataspecifications} % Main chapter title
+\chapter{Beacon Implementation}% Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
-\lhead{Chapter 4. \emph{SWAN Data Specifications}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+\lhead{Chapter 4. \emph{Beacon Implementation}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+Beacon support implementation for SWAN aims to support a large array of beacon formats. But we discovered that current SWAN data format was not suitable 
+for our multi-sensor environment. This chapter describes the changes applied to data formats and then gives more details about beacon implementation.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Introduction}
+\section{SWAN Data Specifications}\label{ssec:swandataspecifications} 
+
 Initially SWAN was designed to take a single value from the sensor data.
 The value should be a primitive type such as Integer, Float, Double etc.
 This constraint applies because SWAN evaluation engine allows the programmer to perform MIN, MAX and AVERAGE operations on given sensor data.
@@ -26,7 +29,7 @@ the key-value to provide individual temperature data or even key-array of values
 %-----------------------------------
 %	SUBSECTION 1
 %-----------------------------------
-\section{Proposed Solutions}
+\subsection{Proposed Solutions}
 All the proposed solutions should meet the following requirements:
 \begin{itemize}
  \item Support multiple sensors of the same type (beacon sensor)
@@ -37,7 +40,7 @@ All the proposed solutions should meet the following requirements:
 
 We will further discuss two options that meet the requirements from above.
 
-\subsection{Data Mapping approach}
+\subsubsection{Data Mapping approach}
 Data Mapping tries to solve the problem by proposing a new approach of how data is being passed form the sensor
 to the evaluation engine. The model is aiming to solve future problems when it comes to supporting multiple sensors
 with multiple values at the same time. The drawback of this solution is the number of changes that are required to be done in the
@@ -100,7 +103,7 @@ We identify four sensor formats and recommend the following representation for e
 %	SUBSECTION 2
 %-----------------------------------
 
-\subsection{Expression Location Approach} \label{sssec:exprlocation}
+\subsubsection{Expression Location Approach} \label{sssec:exprlocation}
 Compared to the Data Mapping, the  Expression Location Approach tries to preserve the single return value and value paths for each sensor.
 It works in addition to the current implementation and maintains the backwards compatibility with the previous expression format.
 The drawback of this approach is very low flexibility when the number of sensors are really high. Also, it tries to solve an immediate 
@@ -151,7 +154,7 @@ Note these expressions can not be evaluated by Evaluation Engine, because it out
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
-\section{Implemented Approach}
+\subsection{Implemented Approach}
 The implemented solution was the \hyperref[sssec:exprlocation]{Expression Location Approach}.
 While the Data Mapping approach brings more novelty, it comes with severe disadvantages:
 \begin{itemize}
@@ -169,3 +172,80 @@ when we bind it.
 The existing sensors preserved their implementation without changes and the beacon based sensors were adapted to get the beacon ID from the location parameters.
 Also, for Bluetooth sensor discovery purpose, we left the Discovery sensor to output an array instead of a single value, assuming that no Tristate Expression will be registered with that 
 sensor.
+
+\section{Beacon based Bluetooth Sensors}
+
+Bluetooth sensors allow us to get proximity data from the nearby beacons. Beacon sensor integration into SWAN expression based approach was not seamless.
+The new data specifications which include beacon extension are discussed in \hyperref[Chapter3]{Chapter 3}.
+
+Before exploring the implementation details we must discuss the available Beacon technology and Beacon Frame format.
+The Bluetooth Low Energy Beacons can broadcast various data with different transmission power and broadcast interval.
+The broadcast power is measured in dBm\cite{dbiRef}. The transmission power can vary from -30dBm to +4dBm. Higher transmit power
+increases the range, but also shortens the battery life. The broadcast interval can vary from 300ms to more than 5 seconds. Higher resolution improves the accuracy of data,
+especially for real-time applications, but also shortens the battery life.
+
+To avoid the fragmentation of the Beacon Market, Google and Apple stepped in and proposed two standards for Beacon Frame Layout:
+\begin{itemize}
+ \item Apple iBeacon - simple beacon format, mostly used for proximity(distance measuring) applications
+ \item Google Eddystone - complex standard, with 3 available frame formats:
+ \begin{itemize}
+  \item Eddystone UID - similar to iBeacon, broadcast unique ID
+  \item EddystoneTLM - telemetry frame format, stores information about the beacon, such as temperature, battery level, number of packets sent
+  \item Eddystone URL - frame layout which encodes a 17 bytes long URL in the frame
+ \end{itemize}
+\end{itemize}
+
+The standards from above are industry recognized and widely implemented by various Beacon Manufacturers.
+Unfortunately, even the Google Eddystone Format is not flexible enough and some companies need to come up with their own format to support extra functionality 
+added to  their beacon products. We will also discuss the following frame formats which are proprietary to companies selling the test beacons, but they enable us to explore the
+new way of using beacons:
+\begin{itemize}
+ \item AltBeacon Beacon Format - default beacon format present in the library used by SWAN for beacon scanning
+ \item Estimote Nearable - Beacon Frame Format developed by Estimote\cite{estimote_company}, with accelerometer and movement data embedded into the format
+\end{itemize}
+
+The beacon implementation is revolving around adding support for the four beacon formats listed above. Implementation details were further split into 
+following steps:
+\begin{itemize}
+ \item Implement Bluetooth Low Energy Scan
+ \item Add support for existing Beacon Formats
+ \item Implement Bluetooth Beacon Discovery
+ \item Implement Bluetooth Based Sensors
+\end{itemize}
+
+\subsection{AltBeacon Library}
+The AltBeacon Library is developed by Radius Networks\cite{radius_networks} company and provide a free and open-source implementation for applications that want to scan for beacons.
+We choose to use this library over a custom implementation because of the easy way to add new beacon formats. The library does not support beacons with encrypted 
+identifiers, but it allows us to parse almost any existing, non-encrypting beacon frame. A proof of flexibility is our beacon layout for Estimote Nearable that we were able to 
+implement in SWAN.
+AltBeacon runs as a service, so SWAN needs to register to get the results of every scan. All the data from available beacons are available at once, so we decided to go for observer 
+pattern, and register all sensors that want to access beacon data in our singleton class. This allows us to scan once for all sensors.
+
+\subsection{Beacon Frame Formats}
+The support for Apple iBeacon, Eddystone UID, Eddystone TLM, Eddystone URL and AltBeacon Format was already available in the library.
+The Estimote format was left for us to analyse and provide the proper parsing expression to the AltBeacon Library.
+
+The process of parsing the non- standard frame starts with finding the specifications for each byte in the frame. Fortunately, we found a NodeJs implementation 
+that parses the Estimote Nearable Frame. The data encoded is presented in \hyperref[fig:estimote_format]{Figure 5.1}.
+Before decoding the data we must tell the AltBeacon Library where to look for the frame identifier. The debugging mode allows us to see how the Bluetooth Low Energy frames are being parsed.
+
+\subsection{Retrieving data from specific Beacons}
+Original SWAN only allowed to return a single value of the primitive type. To comply with the new SWAN Data Specifications, we test the location part of expression to see which information we should provide:
+
+\begin{itemize}
+ \item If location is \textbf{self} we retrieve a random beacon from the list, which matches our frame type and give the result to the user
+ \item if location contains a \textbf{beacon ID} we search for the beacon in the list and if it is present, we will output the result
+\end{itemize}
+
+Other types of operations can be implemented, but first, a new revision of data formats should be made, to set the guidelines for all sensor implementations.
+
+Our implementation relies on a singleton class which gets the result of the scanning and then distributes it to all registered beacon sensors. The AltBeacon library will automatically stop scanning
+if no beacon sensors are registered.
+
+\begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.4]{Figures/data_format.pdf}
+    \rule{35em}{0.5pt}
+  \caption[Estimote Nearable Format]{Estimote Nearable Format}
+  \label{fig:estimote_format}
+\end{figure}
