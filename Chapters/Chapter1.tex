@@ -13,9 +13,10 @@ With the smartphone user base reaching almost two billion users, new technologie
 Smartwatches that pair with our smartphones aim to replace the regular watch, beacons aim to replace WI-FI location support. 
 However, we must not forget that limited battery capacity is still a problem even after so many years of development. The available power is even more limited on the smartwatch, because of
 its small form factor.
-With Android Ecosystem being mature enough, there are little room for new application ideas. Having reliable access to new features and taking advantage of the new Bluetooth Low Energy standard
-enable us to come with new, innovative usage scenarios. SWAN application aims to facilitate the access to sensors available of the phone.
-We try to take advantage of the new technologies by extending SWAN application.
+Having reliable access to new features and taking advantage of the new Bluetooth Low Energy\cite{bt_low} standard
+enable us to come with new, innovative usage scenarios, such as measuring heart rate of elderly care using the smartwatch or deploying beacons in context of smart homes.
+The SWAN framework aims to facilitate the access to sensors available on the phone.
+We try to take advantage of the new technologies by extending the SWAN framework.
 
 The overall goal of the project was to integrate a variety of new Bluetooth Low Energy devices into SWAN,
 including beacons and smartwatches. We encountered several challenging problems that we study in more detail,
@@ -23,12 +24,12 @@ including the following questions:
 
 \begin{itemize}
  \item What is the best method of acquiring data from a sensor located on the smartwatch? Can SWAN operate on the smartwatch, assuming that we can only keep its core functionality?
- \item What are the power consumption on the watch and on the  phone, when SWAN is actively retrieving data from smartwatch?
+ \item What are the power consumption on the watch and  the  phone, when SWAN is running on both the phone and the watch?
  \item What changes should be applied to expression based SWAN, to add support for multiple sensors of the same type located on beacons?
- \item How can we take full advantage of Bluetooth Low Energy Beacons? How do we seamlessly integrate multiple beacon frame formats without increasing the program's complexity?
+ \item How can we access all data on the Bluetooth Low Energy Beacons? How do we seamlessly integrate multiple beacon frame formats without increasing the program's complexity?
 \end{itemize}
 
 The master thesis is structured as follows. In Chapter 2 we will describe the work related to our project, Chapter 3 covers  essential details about the SWAN project and Chapter 4 is dedicated to 
-data format changes that we applied on SWAN  expression to allow support of multiple sensors. Chapter 5 describes all implementation details related to scanning beacons and communication
+beacon implementation and data format changes that we applied on SWAN  expression. Chapter 5 describes all implementation details related to  communication
 with a smartwatch and Chapter 6 offers a detailed analysis of the power consumption for two implemented methods of accessing smartwatch sensors. Chapter 7 concludes the master thesis and describes 
 the future work.
