@@ -9,6 +9,8 @@
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
+In this chapter we briefly describe Android Wear and beacon related projects. Also we focus on SWAN Plus project, which has a lot in common with
+our research.
 
 \section{General}
 For our implementation of smartwatch sensors and Bluetooth beacon sensors we used the standard Android API to send, scan and receive information.
@@ -17,18 +19,24 @@ Using Beetle, it is also possible to retrieve data from heart rate monitors in r
 But compared to our work Beetle only focuses only on retriving data from the smartwatch and does not take into consideration that computation
 can also be done on the Android Wear device.
 
-The implementation on the SWAN service on the smartwatch does not have notable differences compared to a regular Android phone application.
+The implementation of the SWAN service on the smartwatch does not have notable differences compared to a regular Android phone application.
 An extensive description of the operating system on the watch is available  in Understanding Characteristics of Android Wear\cite{android_wear_char}.
 In comparison with our power consumption experiment, the paper's experiment was performed  with power monitors attached 
 directly to the hardware, which gives higher accuracy. However, we are not always interested in power consumption of certain components. Our work is focused on real
 power consumption observed by the user.
 
 The ArmTrak\cite{arm_trak} program, which aims to better understand user's hand gestures, is implemented using the same approach as our phone based 
-smartwatch sensors. However, Armtrak require high accuracy and low refresh rates. This translates into high power consumption, but with our new wear based SWAN expressions, some computation can be
-done locally, on the watch. 
+smartwatch sensors.
+However, Armtrak require high accuracy and low refresh rates. This translates into high power consumption, but with our new wear based SWAN expressions, some computation can be
+done locally, on the watch.
+
+Smart Office Energy Management System(SOEMS)\cite{smart_location_beacon} tries to take andvantage of Bluetooth Low Energy beacons to achieve better 
+power savings in a smart home or smart office context. But, the system does not take into consideration the fragmentation of the beacon market
+and does not focus on an universal solution.
 
 \section{Swan Plus}
 The SWAN Plus\cite{swan_plus} project,  aims to offer expression evaluation on nearby devices, is closely related to our work on adding support for smartwatches and other Bluetooth devices.
 Our implementation of sending SWAN expressions on the watch was coded on top of an already existing mechanism of sending expressions to nearby devices and forwarding results back to the expression
 registrar. On the other hand, SWAN Plus focuses on multiple devices and uses a more close-to-metal approach of scanning and discovering the Bluetooth devices.
+However, SWAN Plus covers different research question, despite the shared implementation.
 

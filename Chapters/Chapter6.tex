@@ -11,7 +11,7 @@
 %----------------------------------------------------------------------------------------
 
 \section{Introduction}
-The current implementation of the SWAN WEAR allows us to choose which way we want to process the data from the smartwatch application:
+The current implementation of the SWAN WEAR allowed us to choose which way we want to process the data from the smartwatch application:
 \begin{itemize}
  \item Perform minimum amount of computation on the watch and just send values to be processed by the SWAN PHONE application
  \item Send the expression to SWAN WEAR application for evaluation
@@ -296,15 +296,15 @@ The test application was built in order to run tests in batch order and gather t
 The testing application has the following workflow:
 For each SWAN expression:
 \begin{itemize}
- \item Register a SWAN expression and get the battery level of the phone before the experiment
- \item Register a SWAN expression and get the battery level of the smartwatch before the experiment
- \item Unregister SWAN expressions used to get the battery levels on phone and wear
- \item Register the start time
- \item Calculate the number of values necessary for the run, based on the given expected runtime in microseconds
- \item Register the experiment expressions and wait until the number of values are reached
- \item Register expression end time
- \item Get the battery level of the phone after the experiment
- \item Get the battery level of the smartwatch after the experiment
+ \item Register a SWAN expression and get the battery level of the phone before the experiment.
+ \item Register a SWAN expression and get the battery level of the smartwatch before the experiment.
+ \item Unregister SWAN expressions used to get the battery levels on phone and wear.
+ \item Register the start time.
+ \item Calculate the number of values necessary for the run, based on the given expected runtime in microseconds.
+ \item Register the experiment expressions and wait until the number of values are reached.
+ \item Register expression end time.
+ \item Get the battery level of the phone after the experiment.
+ \item Get the battery level of the smartwatch after the experiment.
 \end{itemize}
 
 

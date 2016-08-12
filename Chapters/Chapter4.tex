@@ -14,7 +14,7 @@ for our multi-sensor environment. This chapter describes the changes applied to 
 
 \section{SWAN Data Specifications}\label{ssec:swandataspecifications} 
 
-Initially SWAN was designed to take a single an object.
+Initially SWAN was designed to take a single object.
 The object should be a primitive type such as Integer, Float, Double etc.
 This constraint applies because SWAN evaluation engine allows the programmer to perform MIN, MAX and AVERAGE operations on given sensor data.
 Also, History reduction is important when using the single value.
@@ -171,7 +171,7 @@ While the Data Mapping approach brings more novelty, it comes with severe disadv
 On the other hand, the Expression Location approach does not interfere with the Evaluation Engine's algorithm, and location string can be easily 
 handled by sensor implementations. 
 
-Implementing the location extension was easy, we just added an extra parameter of type \textbf{Map} which we pass to the sensor
+Implementing the location extension was easy, we just added an extra parameter of type \textbf{Map}\cite{map} which we pass to the sensor
 when we bind it.
 The existing sensors preserved their implementation without changes and the beacon based sensors were adapted to get the beacon ID from the location parameters.
 Also, for Bluetooth sensor discovery purpose, we left the Discovery sensor to output an array instead of a single value, assuming that no Tristate Expression will be registered with that 
@@ -180,7 +180,7 @@ sensor.
 \section{Beacon based Bluetooth Sensors}
 
 Bluetooth sensors allow us to get proximity data from the nearby beacons. Beacon sensor integration into SWAN expression based approach was not seamless.
-The new data specifications which include beacon extension are discussed in \hyperref[Chapter3]{Chapter 3}.
+The new data specifications which include beacon extension are discussed in \hyperref[Chapter3.2]{Chapter 3.2}.
 
 Before exploring the implementation details we must discuss the available Beacon technology and Beacon Frame format.
 The Bluetooth Low Energy Beacons can broadcast various data with different transmission power and broadcast interval.

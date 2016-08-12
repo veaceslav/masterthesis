@@ -74,7 +74,15 @@ To preserve the functionality, all the methods depending on Proximity Manager an
 the phone was sub-classing the Evaluation Engine in the library and implementing the missing functionality.
 The same design was applied to Abstract SWAN Sensor which was relying on Sense Android Library to offload values\cite{swan_layer}.
 
-After SWAN Core was made independent, we decided to extract SWAN Song and SWAN Interface from it and make them separate libraries.
+\begin{figure}[htbp]
+  \centering
+    \includegraphics[scale=0.5]{Figures/swan_layout.pdf}
+    \rule{35em}{0.5pt}
+  \caption[SWAN Layout with separated libraries]{SWAN Layout with separated libraries}
+  \label{fig:swan_layout}
+\end{figure}
+
+After SWAN Core was made independent, we decided to extract SWAN Song and SWAN Interface from it and make them separate libraries, as we can see in \hyperref[fig:swan_layout]{Figure 5.1}.
 The main reason for this library separation was the way applications interact with SWAN. The SWAN Interface is often imported as a separate JAR in any application that wants to register a 
 SWAN expression. To improve the distribution of the Swan Interface, we decided to make it available\footnotemark  on Android Main Repository - JCenter\cite{jcenter}. 
 \footnotetext{Uploading the JARS required us to follow the tutorial by The Cheese Factory\cite{jcenter_tutorial}.}
