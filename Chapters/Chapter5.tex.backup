@@ -5,34 +5,45 @@
 \label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 \lhead{Chapter 5. \emph{Smartwatch Implementation}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
-
+In this chapter, we will describe our value based approach of gathering data from
+smartwatch, then we briefly describe the new SWAN layout and we conclude with the mini SWAN implementation for the smartwatch.
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{ Value Based Smartwatch Sensors }
-Implementing the value based smartwatch sensor was the first option and it derived from the Android's guidelines of performing the minimum amount of computation on the watch.
+\section{Value Based Smartwatch Sensors }
+Value based approach aims to retrive the sensor values from the smartwatch and perform evaluation on the phone.
+Implementing the value based smartwatch sensor was the first option and it derived
+from the Android's guidelines of performing the minimum amount of computation on the watch.
 The other requirement was to keep code for Android Wear as small as possible, since the performance of the integrated components is lower compared to computing power on the smartphone.
 
-To keep the implementation simple, we have a singleton class  responsible for communication between the smartphone and watch. We also issue start and stop commands to our service on the smartwatch,
-so when no smartwatch sensor is active, the SWAN will not run on the watch.
+To keep the implementation simple, we have a singleton class  responsible for communication between the smartphone and watch.
+We also issue start and stop commands to our service on the smartwatch,
+so when no smartwatch sensor is active, the SWAN service will not run on the watch.
 
-We used the data path \cite{android_wear_datapath} for reliable communication between devices. The use of data path guarantee that the value will always be delivered at the cost of increased delay
+We used the data path\cite{android_wear_datapath} for reliable communication between devices. The use of data path guarantee that the value will always be delivered at the cost of increased delay
 and jitter\cite{jitter_ref} which affect our delay enforcing policy in SWAN.
 
-The watch service is implemented as a foreground service\cite{foreground_service}. Running in foreground requires us to display the notification on the watch, but on the other hand we have the 
+The watch service is implemented as a foreground service\cite{foreground_service}.
+Running in foreground requires us to display the notification on the watch, but on the other hand we have the 
 guarantee that our service will not be put to sleep by the operating system. 
-Each SWAN sensor on the phone  is able to send start and stop commands, and the watch service will always count how many sensors are active. When no sensors are active, the service will stop.
 
 Despite the Google's guidelines of keeping the Android Wear applications small, value based smartwatch sensors have poor energy efficiency. More about the power consumption experiment, 
 in \hyperref[Chapter6]{Chapter 6}.
 
-\section{Swan Application Layout}
-In the process of implementing the support for SWAN on smartwatch(also referred as SWAN WEAR) and Beacon Based Sensor, SWAN application layout has changed dramatically.
 
-We will cover the following main changes applied to SWAN project structure during the last 6 months:
+
+\section{Expression  Based  Smartwatch Sensors }
+Expression based smartwatch sensor implementation aims to bring SWAN on your smartwatch. Before, we didn't consider to have SWAN on the watch a good idea. SWAN is a big application and running
+it on the watch could result in severe performance issues on the watch. The opportunity of running SWAN on the watch arose after we managed to split SWAN source-code into \hyperref[scc:swan_split]{multiple libraries}. 
+
+
+\subsection{Swan Application Layout}
+In the process of implementing the support for SWAN on smartwatch (also referred as SWAN WEAR) and Beacon Based Sensor, SWAN application layout has changed dramatically.
+
+We will cover the following main changes applied to SWAN project structure:
 \begin{itemize}
- \item Splitting the SWAN project sources in libraries
+ \item Splitting the SWAN project sources in libraries.
  \item Uploading the SWAN JARS in publicly available repository - JCenter
 \end{itemize}
 
@@ -40,32 +51,31 @@ Before each change  from above was made,  a merge of all SWAN repositories was m
 Big changes on the project structure have a big impact on SWAN and could bring unexpected bugs.
 
 
-\subsection{Splitting SWAN sources into libraries}\label{scc:swan_split}
-After the implementation of the smartwatch sensors and beacon sensors, as part of research topic, SWAN had to be ported on smartwatch.
-There were multiple options to handle the challenge:
+After the implementation of the smartwatch sensors and beacon sensors, we ported SWAN on the smartwatch.\label{scc:swan_split}
+There were multiple options to handle this challenge:
 \begin{itemize}
- \item Clone all SWAN code and adapt it for the smartwatch
- \item Extract all common code and make it a library
+ \item Clone all SWAN code and adapt it for the smartwatch.
+ \item Extract all common code and make it a library.
 \end{itemize}
 
-I choose the second option, since it will avoid duplicate code and will allow easier maintenance in the future. As a starting point, I decided to see if the Evaluation Engine
+We choose the second option, since it will avoid duplicate code and will allow easier maintenance in the future. As a starting point, we decided to see if the Evaluation Engine
 code can be extracted and called from a library. The dependencies were extensive. The Evaluation Engine was depending on:
 \begin{itemize}
- \item Swan Interface code - Classes that applications need to communicate with SWAN
- \item Swan Song Implementation - Parser and Data structure implementation for SWAN Expression
- \item Sensor Interfaces - used to implement new sensors in SWAN
- \item Beacon Implementation
- \item Proximity Implementation (SWAN Plus)
+ \item Swan Interface code - Classes that applications need to communicate with SWAN.
+ \item Swan Song Implementation - Parser and Data structure implementation for SWAN Expression.
+ \item Sensor Interfaces - used to implement new sensors in SWAN.
+ \item Beacon Implementation.
+ \item Proximity Implementation (SWAN Plus).
 \end{itemize}
 
-The first three components were separated from the SWAN Phone application and added to the SWAN core. Unfortunately, the dependency on the last two items
+The first three components were separated from the SWAN Phone application and added to the SWAN Core. Unfortunately, the dependency on the last two items
 was still present and it had to be removed from the code, since the implementation was relevant only for phone and not for the smartwatch.
 To preserve the functionality, all the methods depending on Proximity Manager and Beacon Discovery were replaced with empty bodies and the Evaluation Engine on
 the phone was sub-classing the Evaluation Engine in the library and implementing the missing functionality.
 The same design was applied to Abstract SWAN Sensor which was relying on Sense Android Library to offload values\cite{swan_layer}.
 
-After \textbf{SWAN Core} was made independent, we decided to extract \textbf{SWAN Song} and \textbf{SWAN Interface} from it and make them separate libraries.
-The main reason for this library separation was the way applications interact with SWAN. SWAN Interface is often imported as a separate JAR in any application that wants to register a 
+After SWAN Core was made independent, we decided to extract SWAN Song and SWAN Interface from it and make them separate libraries.
+The main reason for this library separation was the way applications interact with SWAN. The SWAN Interface is often imported as a separate JAR in any application that wants to register a 
 SWAN expression. To improve the distribution of the Swan Interface, we decided to make it available\footnotemark  on Android Main Repository - JCenter\cite{jcenter}. 
 \footnotetext{Uploading the JARS required us to follow the tutorial by The Cheese Factory\cite{jcenter_tutorial}.}
 
@@ -73,18 +83,23 @@ Because we are maintaining the packages on JCenter now, the old packages and pac
 The JCenter  is not storing the packages in JAR format, but in the new format made to accommodate the Android Resources: AAR \cite{aar_format}. 
 The new package format can be built and uploaded directly from Android Studio. 
 
-More information about how to manage and upload swan libraries is available on SWAN wiki on Github\cite{swanWiki}
+More information about how to manage and upload the SWAN libraries is available on SWAN wiki's Github\cite{swanWiki}.
 
+\subsection{SWAN On Android Wear}
+When compared to initial SWAN application, SWAN on Android Wear, or mini-SWAN is only a part of the original application.
+The list of components that are not included in mini-SWAN:
+\begin{itemize}
+ \item Proximity Manager - This component is not relevant for smartwatch. We do not intend to further forward the expression.
+ \item Configuration Activity - We only implement an evaluation service with no UI components
+ \item Beacon Discovery - While smartwatch has scanning capabilities, it is better to leave this component for phones
+ \item Database storage - The space on the watch is limited and we are only interested in forwarding values
+\end{itemize}
 
-\section{Expression  Based  Smartwatch Sensors }
-
-Expression based smartwatch sensor implementation aims to bring SWAN on your smartwatch. Before, we didn't consider to have SWAN on the watch a good idea. SWAN is a big application and running
-it on the watch could result in sever performance issues on the watch. The opportunity on running SWAN on watch arose after we managed to split SWAN source-code into \hyperref[scc:swan_split]{multiple libraries}. Some performance incurring features, such as database storage were left behind, and now the source-code was small enough to run on the watch.
-
+Some performance incurring features, such as database storage were left behind, and now the source-code was small enough to run on the watch.
 Compared to normal SWAN expression, a wear expression has the \hyperref[fig:SwanExpression]{location string} set to \textbf{wear} keyword. Evaluation Engine is responsible for changing the location
 to \textbf{self} and forwarding the expression to SWAN on the smartwatch.
 The implementation of expression based smartwatch sensors added on top of the existing value based implementation. New commands were added to start and stop a SWAN expression on the watch.
-The values sent back use the same implementation as for value based sensors. 
+The values sent back use the same implementation as for value based sensors.
 
 The main difference between value based and expression based sensors is that the values are not sent to SWAN sensor implementation for evaluation, but rather added to Evaluation Engine list of cached
 values. This approach offers very low power consumption on the phone, as we can see from the power analysis in \hyperref[Chapter6]{Chapter 6}.
