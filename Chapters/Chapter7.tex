@@ -11,16 +11,16 @@
 %----------------------------------------------------------------------------------------
 
 \section{Conclusions}
-The master thesis presents the use of new technologies, such as smart watches and beacons in the context of mobile phone applications. 
+The master thesis presents the use of new technologies, such as smartwatches and beacons in the context of mobile phone applications. 
 The added support for beacon based sensors allowed us to provide specifications for data formats which can be used as guidelines for adding support of other sensor types. We proposed two
 specification drafts and we opted for implementing the option which has the best compatibility with the existing implementation.
 We noticed that the beacon market suffers from very high fragmentation despite the effort from Google and Apple to offer a standard. However, we managed to overcome this obstacle by using
 a single, open-source library for parsing. Moreover, we proved that even a closed source format such as Estimote Nearable can be easily analysed and supported without the use of the proprietary development kit.
 
 We proposed and implemented two methods 
-of accessing smartwatch features and provided an extensive power analysis of using them in real life scenarios. As results of our research we demonstrated that SWAN is able to run
-on any Android Wear device. SWAN running on the smartwatch was able to surpass simple data collection in any test scenario in power efficiency,
-providing superior power savings on both phone and watch.
+of accessing smartwatch features(value based and expression based) and provided an extensive power analysis of using them in real life scenarios. As results of our research we demonstrated that SWAN is able to run
+on any Android Wear device. The SWAN running on the smartwatch was able to surpass simple data collection in any test scenario in respect to power efficiency,
+providing superior power savings on both the phone and the watch.
 
 
 
@@ -28,9 +28,9 @@ providing superior power savings on both phone and watch.
 %	SUBSECTION 1
 %-----------------------------------
 \section{Future Work}
-Our power saving tests revealed inconsistent run times for the same amount of requested values and constant delay. For some test cases we noticed a run time value twice as high as expected.
-Long run times can also translate in poor power efficiency. We were able to identify few problems with SWAN delay enforcing implementation, but the problem should be further investigated.
+Our power saving tests revealed inconsistent runtimes for the same amount of requested values and constant delay. For some test cases we noticed a runtime value twice as high as expected.
+Long run times can also translate to poor power efficiency. We were able to identify few problems with delay enforced by SWAN, but they need to be further investigated.
 
 We were able to prove that multiple sensors of the same type can be integrated with SWAN, by integrating support for multiple beacons and implementing few test sensors to retrieve values.
-Unfortunately, we were only able to validate the sensors with Swan Monitor\cite{swan_monitor} application. Building a real proof-of-concept application that use beacons to present real use cases should be done in near future.
+Unfortunately, we were only able to validate the sensors with Swan Monitor\cite{swan_monitor} application. Building a real proof-of-concept application that uses beacons to present real use cases should be done in the near future.
 
